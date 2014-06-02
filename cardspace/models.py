@@ -145,7 +145,6 @@ class Graphic(models.Model):
     def __unicode__(self):
         return self.card.__unicode__()+'_'+self.fcard.carduser.get_full_name
 
-
 class CardTag(models.Model):
     '''
     CardTag class

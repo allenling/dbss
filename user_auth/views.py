@@ -7,12 +7,10 @@ from django.conf import settings
 from django.contrib.auth.views import password_change
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import ListView
-from django.views.generic.base import TemplateView
-from django.views.generic.edit  import CreateView
+from django.views.generic.base import TemplateView, View
 
 from avatar.views import add
 
@@ -27,7 +25,7 @@ from redis_cache import get_redis_connection
 
 from dbss.utils import MyPaginate, send_message
 
-from dbss.cardspace.models import Card, Message
+from dbss.cardspace.models import Card
 
 from dbss.user_auth.models import MyUser as User
 from dbss.user_auth.models import UserFollow
@@ -111,7 +109,7 @@ class FeedPage(BaseUserMixin, ListView):
 class MessagePage(BaseUserMixin, ListView):
 
     template_name = 'user_auth/message.html'
-    model = Message
+    model = Card
     paginate_by = 15
     context_object_name = 'object'
     sview = True
@@ -177,13 +175,12 @@ class GetMessage(MessagePage):
             raise Http404
         return super(GetMessage, self).get(request, *args, **kwargs)
 
-class SendMessage(BaseUserMixin, CreateView):
+class SendMessage(BaseUserMixin, View):
 
-    model = Message
+    model = Card
     form_class = SmessageForm
     template_name = 'user_auth/smessage.html'
     object = None
-
 
     def validate_data(self, towhostr, context):
         form = self.form_class(self.request.POST)
@@ -222,7 +219,7 @@ class SendMessage(BaseUserMixin, CreateView):
         context = request.POST['context']
         vadata, form = self.validate_data(towhostr, context)
         if vadata:
-            return self.render_to_response(self.get_context_data(form=form, name=towhostr, context=context))
+            return render(request, 'user_auth/smessage.html', {'form': form, 'rquser': self.rquser})
         towholist = towhostr.split(',')
         self.processmessage(request, towholist, context)
         return render(request, 'done.html', {'reurl': reverse('user_auth:mymessage', kwargs={'userpk': request.user.id }), 'content': 'send success'})
@@ -235,7 +232,7 @@ class SendMessage(BaseUserMixin, CreateView):
 
     def get(self, request, *args, **kwargs):
         self.getisowner(request, kwargs)
-        return super(SendMessage, self).get(request, *args, **kwargs)
+        return render(request, 'user_auth/smessage.html', {'form': self.form_class(), 'rquser': self.rquser})
     
 
 class InviteFriendsList(BaseUserMixin, ListAPIView):

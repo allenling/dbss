@@ -5,11 +5,10 @@ import pickle
 
 
 from django.core.mail import EmailMultiAlternatives
-from django.db.models import Q
 
 from redis_cache import get_redis_connection
 
-from dbss.cardspace.models import Fcard, Graphic, PrivateCardPreuser, Message
+from dbss.cardspace.models import Fcard, Graphic, PrivateCardPreuser
 
 from dbss.user_auth.models import MyUser as User
 

@@ -1,5 +1,5 @@
 #coding=utf8
-from dbss.cardspace.models import Card, Message, Fcard, CardTag, Graphic, PrivateCardPreuser
+from dbss.cardspace.models import Card, Fcard, CardTag, Graphic, PrivateCardPreuser
 from django.contrib import admin
 from django import forms
 from ckeditor.widgets import CKEditorWidget
@@ -45,7 +45,6 @@ class CardTagAdmin(admin.ModelAdmin):
 
 admin.site.register(Card, CardAdmin)
 admin.site.register(Fcard, FCardAdmin)
-admin.site.register(Message, MessageAdmin)
 admin.site.register(CardTag, CardTagAdmin)
 admin.site.register(Graphic)
 admin.site.register(PrivateCardPreuser)
