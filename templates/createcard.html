@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+<link href="/static/css/bootstrap-tagsinput.css" rel="stylesheet">
+<script src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+{% endblock %}
+{% block mainrow %}
+<div class="row">
+  <div class="col-sm-12" style="margin-bottom:20px;">
+    <h1 ><span class="label label-default" style="background-color:#f1c40f;">创建我的活动卡</span></h1>
+  </div>
+</div>
+<form method="post" action="{% url 'createcard' %}" style="margin-bottom:150px;">
+  {% csrf_token %}
+  {{ form }}
+  <h2 ><a href="{% url 'tagspage' %}" style="text-decoration:none;"><span class="label label-default" style="background-color:#f39c12;">标签</span></a><small style="margin-left:5px;">最多四个标签，每个标签最多13个字符</small></h2>
+  <input type="text" id="id_tags" name="tags" value=" " class="form-control" data-role="tagsinput" placeholder="添加标签" />
+  {% if form.errors.tags %}
+  <ul class="errorlist">
+  <li style="color:red;">
+  {{ form.errors.tags }}
+  </li>
+</ul>
+  {% endif %}
+  <input type="submit" class="btn btn-primary pull-right" value="创建"/>
+</form>
+{% endblock %}
+{% block extra_js %}
+<script src="/static/js/bootstrap-tagsinput.js"></script>
+<script src="/static/js/createcard.js"></script>
+{% endblock %}

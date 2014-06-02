@@ -1,0 +1,66 @@
+{% extends 'user_auth/index.html' %}
+{% load avatar_tags %}
+{% block extra_css %}
+<link href="/static/css/message.css" rel="stylesheet">
+{% endblock %}
+          {% block leftbar %}
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav" style="padding-top:0;">
+              <li ><a href="{% url 'user_auth:index' rquser.id %}" style="text-align:center;padding-left:0;padding-right:0;padding-top:0;margin-bottom:10px;">{% avatar rquser 190 %}</a></li>
+              <li ><a href="{% url 'user_auth:useredit' rquser.id %}">编辑<i class="fa fa-pencil pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:index' rquser.id %}">动态<i class="fa fa-volume-up pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:myprivate' rquser.id %}">私密活动<i class="fa fa-pencil-square-o pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:mypublic' rquser.id %}">公开活动<i class="fa fa-external-link pull-right leftbaricon"></i></a></li>
+              <li class="active"><a href="{% url 'user_auth:mymessage' rquser.id %}">信息<i class="fa fa-envelope pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:myfriends' rquser.id %}">关注<i class="fa fa-group pull-right leftbaricon"></i></a></li>
+						</ul>
+					</div>
+        {% endblock %}
+        {% block rightcontent %}
+        <div class="row">
+          <div class="col-sm-12">
+            <p ><a href="{% url 'user_auth:smessage' request.user.id %}" > <button class="btn btn-primary" type="button">写信息</button></a></p>
+          </div>
+        </div>
+        <div class="tab-content">
+          <div class="tab-pane active" id="Unread">
+            {% for i in object %}
+					<div class="bs-sidebar" role="complementary" >
+              <div class="col-sm-1" style="margin-top:5px;padding-left:0;padding-right:0;">
+                <div class="row">
+                  <div class="col-sm-12">
+                    {% if request.user.id == i.towho_id %}
+                    {% avatar i.who_username 50 %}
+                    {% else %}
+                    {% avatar i.towho_username 50 %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-11" style="margin-bottom:50px;">
+                <ul class="nav bs-sidenav card {{ i.status }}" style="margin-top:5px;margin-bottom:20px;">
+							<li >
+							<div class="cardmain">
+								<div class="crecently">
+									<div class="col-sm-12 cright recentcontext">
+                    {% if i.showhtml %}
+                        {% autoescape off %}
+                        {{ i.context }}
+                        {% endautoescape %}
+                    {% else %}
+                    {{ i.context }}
+                    {% endif %}
+										<hr class="cardivi">
+                    <span >{{ i.pub_date }}</span>
+                    {% if sview %}<a href = "{% url 'user_auth:getmessage' rquser.id i.towho_id %}"><button class="btn btn-primary btn-xs pull-right vmbutton" type="button" >view</button></a>{% endif %}
+									</div>
+                </div>
+              </div>
+							</li>
+						</ul>
+          </div>
+					</div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endblock %}

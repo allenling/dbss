@@ -1,0 +1,30 @@
+{% extends 'user_auth/friends.html' %}
+{% load avatar_tags %}
+          {% block leftbar %}
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav" style="padding-top:0;">
+              <li ><a href="{% url 'user_auth:index' rquser.id %}" style="text-align:center;padding-left:0;padding-right:0;padding-top:0;margin-bottom:10px;">{% avatar rquser 190 %}</a></li>
+              {% if rquser.isrefriend == True %}
+              <li class="active"><a >已经互相关注<i class="fa fa-chain pull-right leftbaricon"></i></a></li>
+              {% elif rquser.meconcernr == True %}
+              <li class="active"><a >关注了我<i class="fa fa-bookmrak pull-right leftbaricon"></i></a></li>
+              {% endif %}
+              <li ><a href="{% url 'user_auth:index' rquser.id %}">动态<i class="fa fa-volume-up pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:mypublic' rquser.id %}">公开活动<i class="fa fa-external-link pull-right leftbaricon"></i></a></li>
+              <li class="active"><a href="{% url 'user_auth:myfriends' rquser.id %}">关注<i class="fa fa-group pull-right leftbaricon"></i></a></li>
+              {% if rquser.isrefriend == False and rquser.rconcernme = False %}
+              <li class="useractionadd" ><a href="{% url 'user_auth:myprivate' rquser.id %}">加关注<i class="fa fa-plus pull-right leftbaricon"></i></a></li>
+              {% else %}
+              <li class="useractionrec" ><a href="{% url 'user_auth:myprivate' rquser.id %}">取消关注<i class="fa fa-minus pull-right leftbaricon"></i></a></li>
+              {% endif %}
+              <li ><a href="{% if anonyauth %}{% url 'auth_login' %}?next={{ request.path }}{% else %}{% url 'user_auth:smessage' request.user.id %}?name={{ rquser.get_full_name }}{% endif %}">发信息<i class="fa fa-comment-o pull-right leftbaricon"></i></a></li>
+						</ul>
+					</div>
+        {% endblock %}
+        {% block friendsconcerns %}
+        <ul class="nav nav-pills nav-justified">
+          <li class="active"><a href="{% url 'user_auth:myfriends' rquser.id %}">互相关注<i class="fa fa-chain pull-right toprelationicon" ></i></a></li>
+          <li ><a href="{% url 'user_auth:myconcerns' rquser.id %}">他/她关注的<i class="fa fa-plus pull-right toprelationicon"></i></a></li>
+          <li ><a href="{% url 'user_auth:concernsme' rquser.id %}">关注他/她的<i class="fa fa-bookmark pull-right toprelationicon"></i></a></li>
+        </ul>
+        {% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load avatar_tags %}
+{% block mainrow %}
+<div class="row">
+  <div class="col-sm-12" style="margin-bottom:20px;">
+    {% block tagortagcard %}<h1 ><span class="label label-default">标签</span></h1>{% endblock %}
+  </div>
+</div>
+<div class="tagconetnt" style="margin-top:30px;">
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav">
+              <div class="row">
+                {% for i in tagobject %}
+                <div class="col-sm-6 tagitem">
+                  <a href="{% url 'tagcard' i.id %}" style="text-decoration:none;"><span class="label label-warning">{{ i.getname }}</span>&nbsp;&nbsp;<span class="badge">{{ i.allc }}</span></a>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+          <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li ><a href="/tags/?page={{ page_obj.previous_page_number }}"><i class="fa fa-arrow-circle-left"></i></a></li>
+            {% endif %}
+            {% if pageheadot %}
+            <li ><a href="/tags/?page=1">1</a></li>
+            <li class="disable"><a href="#">...</a></li>
+            {% endif %}
+            {% for z in phead %}
+            <li ><a href="/tags/?page={{ z }}">{{ z }}</a></li>
+            {% endfor %} 
+            <li class="active"><a href="/tags/?page={{ z }}">{{ page_obj.number }}</a></li>
+            {% for k in ptail %}
+            <li ><a href="/tags/?page={{ k }}">{{ k }}</a></li>
+            {% endfor %}
+            {% if pagetaildot %}
+            <li class="disable"><a href="#">...</a></li>
+            <li ><a href="/tags/?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
+            {% endif %}
+            {% if page_obj.has_next %}
+            <li ><a href="/tags/?page={{ page_obj.next_page_number }}"><i class="fa fa-arrow-circle-right"></i></a></li>
+            {% endif %}
+          </ul>
+          </div>
+        </div>
+</div>
+{% endblock %}

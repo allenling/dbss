@@ -1,0 +1,37 @@
+{% extends 'user_auth/friends.html' %}
+{% load avatar_tags %}
+        {% block rightcontent %}
+        <div class="row" style="margin-top:30px;">
+          <div class="col-sm-12">
+        {% block friendsconcerns %}
+        <ul class="nav nav-pills nav-justified">
+          <li ><a href="{% url 'user_auth:myfriends' rquser.id %}">互相关注<i class="fa fa-chain pull-right toprelationicon" ></i></a></li>
+          <li ><a href="{% url 'user_auth:myconcerns' rquser.id %}">我的关注<i class="fa fa-plus-circle pull-right toprelationicon"></i></a></li>
+          <li class="active"><a href="{% url 'user_auth:concernsme' rquser.id %}">关注我的<i class="fa fa-bookmark pull-right toprelationicon"></i></a></li>
+        </ul>
+        {% endblock %}
+      </div>
+    </div>
+        <div class="row" style="margin-top:30px;">
+        {% for i in object %}
+        <div class="col-sm-4 userwall">
+          <div class="col-sm-4 userinfo">
+            {% avatar i.fuser 50 %}
+          </div>
+          <div class="col-sm-8 useraction" style="padding-left:0px;padding-right:0px;">
+            <p >{{ i.fuser.username|slice:"30" }}</p>
+            {% if isowner %}
+            <span type="button" target="{{ i.fuser.id }}" target-name="{{ i.fuser.username }}" class="label label-warning"  onclick="friendaction({{ request.user.id }}, {{ i.fuser.id }});" id="check_{{ i.fuser.id }}">{% block friorcon %}<i class="fa fa-plus-circle" ></i>{% endblock %}</span>
+            <a href="{% url 'user_auth:smessage' rquser.id %}?name={{ i.fuser.username }}"><span type="button" class="label label-warning" ><i class="fa fa-comment-o leftbaricon"></i></span></a>
+            {% elif request.user.id != i.fuser.id %}
+            <span type="button" target="{{ i.fuser.id }}" target-name="{{ i.fuser.username }}" class="label label-warning"  onclick="friendaction({{ request.user.id }}, {{ i.fuser.id }});" id="check_{{ i.fuser.id }}">{% if i.fuser.isrefriend %}<i class="fa fa-users"></i>&nbsp;<i class="fa fa-minus-circle" ></i>{% elif i.fuser.rconcernme %}<i class="fa fa-minus-circle"></i>{% elif i.fuser.meconcernr  %}<i class="fa fa-bookmark"></i>&nbsp;<i class="fa fa-plus-circle"></i>{% else %}<i class="fa fa-plus"></i>{% endif %}</span>
+            <a href="{% url 'user_auth:smessage' rquser.id %}?name={{ i.fuser.username }}"><span type="button" class="label label-warning" ><i class="fa fa-comment-o leftbaricon"></i></span></a>
+            {% endif %}
+          </div>
+            <div class="col-sm-12" style="margin-top:4px;padding-left:0;padding-right:0;">
+              {{ i.fuser.get_something }}
+            </div>
+        </div>
+        {% endfor %}
+      </div>
+        {% endblock %}

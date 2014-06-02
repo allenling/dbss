@@ -1,0 +1,31 @@
+{% extends 'user_auth/message.html' %}
+{% load avatar_tags %}
+{% block extra_css %}
+<link href="/static/css/bootstrap-tagsinput.css" rel="stylesheet">
+{% endblock %}
+{% block rightcontent %}
+<form id="smform" action="{% url 'user_auth:smessage' request.user.id %}" method="POST">
+  {% csrf_token %}
+  <div class="form-group">
+    <div class="col-sm-12" style="padding-left:0;padding-right:0;">
+      <input id="id_towho" name="towho" type="text" value="{{ request.GET.name }},{{ name }}" class="form-control"  data-role="tagsinput" placeholder="发送给" />
+    {{ form.errors.towho }}
+  </div>
+  </div>
+  <div class="form-group">
+    <textarea id="id_context" rows="10" cols="40" name="context" class="form-control" style="resize:none;" placeholder = "最多300个字">{{ context }}</textarea>
+    {{ form.errors.context }}
+  </div>
+  <input id="smbutton" type="submit" class="btn btn-primary pull-right" value="发送"/>
+  <button id="sfriends" type="button" class="btn btn-warning " target-url="{% url 'user_auth:invitefriendlist' request.user.id %}">从好友中选择</button>
+</form>
+<div class="row" id="friendslist" style="margin-top:30px;">
+</div>
+{% endblock %}
+{% block pagination %}
+{% endblock %}
+{% block extra_js %}
+<script src="/static/js/bootstrap-tagsinput.js"></script>
+<script type="text/javascript" src="/static/js/utils.js"></script>
+<script type="text/javascript" src="/static/js/smessage.js"></script>
+{% endblock %}

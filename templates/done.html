@@ -1,0 +1,19 @@
+{% extends 'registration/login.html' %}
+{% block bodycontent %}
+<div class="row" style="margin-top:100px;">
+  <div class="col-sm-3 col-sm-offset-4">
+      <div class="bs-sidebar" role="complementary">
+        <ul class="nav bs-sidenav toptools" >
+          <li ><a href="#">
+            <p id="tarp" target-url="{{ reurl }}" style="text-align:center;">{{ content }}</p>
+            <hr >
+            <p style="text-align:center;"><span id="totalSecond" style="text-align:center;">5</span>秒后跳转</p>
+          </a>
+          </li>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="/static/js/done.js">
+</script>
+{% endblock %}

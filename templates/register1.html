@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load avatar_tags %}
+{% block extra_css %}
+<link href="/static/css/register.css" rel="stylesheet">
+{% endblock %}
+{% block bodycontent %}
+<div class="container mainrow registermain">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="bs-sidebar" role="complementary">
+        <ul class="nav bs-sidenav toptools" >
+          <li>
+          <div class="register1left">
+            <span ><a href="/" style="text-decoration:none;color:#ecf0f1;">WhySoS</a></span>
+          </div>
+          <div class="register1input">
+            <form action="{% url 'register' %}" method="post">
+              {{ wizard.management_form }}
+              {% csrf_token %}
+              {{ wizard.form }}
+              <input class="btn btn-success" type="submit" value="加入我们">
+              <button class="btn btn-primary pull-right" type="button" style="vertical-align:bottom;"><a href="/" style="color:white;text-decoration:none;">回到首页</a></button>
+              <input name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}/{% endif %}" type="hidden">
+            </form>
+          </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="bs-sidebar" role="complementary">
+        <ul class="nav bs-sidenav toptools" >
+          <li>
+          <div class="register1right">
+            <div class="col-sm-12" style="background-color:#2980b9;color:white;">
+              <h3 style="text-align:center;">关于Why So Serious</h3>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;">
+              <p ><span style="color:red;">WhySoS</span> 是一个你可以创建和分享活动，并且邀请朋友一起来参与。 </p>
+              <p >在这里，一个活动在这里被称为卡片（Card），创建卡的人称为建卡人（Card Creator），加入和更新Card的人用将会为这个Card添加更多的Card。这些卡片将会记录你和你伙伴们的活动，你可以查看在你和你的伙伴的一起参与的活动中的足迹历程。</p>
+            </div>
+          </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="/static/js/register.js"></script>
+{% endblock %}

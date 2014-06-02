@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load avatar_tags %}
+{% block bread %}
+<h1 ><span class="label label-default">标签:{{ tagobj }}</span></h1>
+{% endblock %}
+          {% block leftbar %}
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav">
+              <li {% if pattern == 'N' %}class="active"{% endif %}><a href="{% url 'tagcard' tagobj.id %} ">最新<i class="fa fa-star pull-right leftbaricon"></i></a></li>
+              <li {% if pattern == 'D' %}class="active"{% endif %}><a href="{% url 'tagcardd' tagobj.id %}">Driving<i class="fa fa-dashboard pull-right leftbaricon"></i></a></li>
+						</ul>
+					</div>
+        {% endblock %}
+

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load avatar_tags %}
+{% block extra_css %}
+<link href="/static/css/login.css" rel="stylesheet">
+{% endblock %}
+{% block bodycontent %}
+<div class="container mainrow loginmain">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="bs-sidebar" role="complementary">
+						<ul class="nav bs-sidenav toptools" >
+							<li >
+							<div id="toptoolabel" class="loginlabel">
+                <a href="/" style="text-decoration:none;">Why So Serious</a>
+							</div>
+							<div class="row" id="loginput">
+                <div class="col-sm-12">
+                  <form class="form" action="{% url 'auth_login' %}" method="post" role="form">
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-sm-4">
+                    <div class="form-group" >
+                      <input type="text" class="form-control" id="id_user" name="username" {% if form.username.value %}value="{{ form.username.value }}"{% else %}placeholder="用户名"{% endif %}/>
+                      {{ form.username.errors }}
+                    </div>
+                    </div>
+                    <div class="col-sm-4">
+                    <div class="form-group">
+                      <input type="password" class="form-control" for="inputError" id="id_password" name="password" placeholder="密码" />
+                      {{ form.password.errors }}
+                    </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <input class="btn btn-success" type="submit" value="我回来了!">
+                      <input name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}/{% endif %}" type="hidden">
+                    </div>
+                    </div>
+                  </form>
+                </div>
+							</div>
+              <div class="row" style="margin-bottom:10px;">
+                <div class="col-sm-12">
+                  <div class="col-sm-12">
+                    <span class="badge" ><a href="/" style="color:white;">忘记密码</a></span>
+                    <span class="badge" style="background-color:#27ae60;"><a href="/register/?next={% if request.GET.next %}{{ request.GET.next }}{% elif request.get_full_path == '/register/' %}/{% else %}{{ request.get_full_path }}{% endif %}" style="color:white;">加入我们 </a></span>
+                </div>
+                </div>
+              </div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+</div>
+{% endblock %}

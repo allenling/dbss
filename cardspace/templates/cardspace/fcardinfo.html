@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+<link href="/static/css/morris.css" rel="stylesheet">
+<link href="/static/css/fcardinfo.css" rel="stylesheet">
+{% endblock %}
+{% load avatar_tags %}
+{% block bread %}
+<ol class="breadcrumb mybread">
+  <li ><a href="{% url 'cardspace:cardinfo' card.id %}">{{ card.title }}</a></li>
+  <li class=row"><a href="#">{{ fcardusername }}</a><li>
+</ol>
+<div id="myg" style="height:300px;background-color:white;display:none;"></div>
+{% endblock %}
+          {% block leftbar %}
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav" style="margin-bottom:0;">
+              <li class="sog active" target = "Detail"><a>细节<i class="fa fa-folder-open pull-right leftbaricon"></i></a></li>
+              <li class="sog" target = "Graphic"><a>图形<i class="fa fa-bar-chart-o pull-right leftbaricon"></i></a></li>
+						</ul>
+					</div>
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav" style="margin-bottom:0;">
+              <li class="active"><a id="timeline">时间轴<i class="fa fa-barcode pull-right leftbaricon"></i></a></li>
+						</ul>
+					</div>
+        {% endblock %}
+        {% block otherleftbar %}
+					<div class="bs-sidebar leftbar" role="complementary" id="subtimeline" >
+						<ul class="nav bs-sidenav" style="margin-top:0;" id="subtimelineul">
+						</ul>
+					</div>
+        {% endblock %}
+        {% block rightcontent %}
+					<div class="bs-sidebar" role="complementary">
+						<ul class="nav bs-sidenav card">
+							<li >
+              <div class="cardmain">
+                <div class="cheader">
+                  <div class="row">
+                    <div class="col-sm-12">
+                  <div class="col-sm-1 cleft">
+                    {% avatar card.carduser 30 %}
+                  </div>
+                  <div class="col-sm-11 cright">
+                    <span class="cardtitle">{{ card.getitle }}</span>
+                    <span class="cardinfo"><small >{{ card.carduser }}</small>&nbsp;&nbsp;<small class="carddate"><i class="fa fa-calendar"></i>&nbsp;{{ card.getpubdate }}</small></span>
+                  </div>
+                  </div>
+                  </div>
+                </div>
+								<hr class="cardivi">
+                <div class="cardetail">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      {% autoescape off %}
+                      {{ card.context }}
+                      {% endautoescape %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </li>
+              <li ><a style="text-align:center;" id="bfsenda"><i class="fa fa-spinner fa-spin fa-4x" style="display:none;"></i></a></li>
+            </ul>
+          </div>
+					<div class="bs-sidebar" role="complementary" id="fcardtemp" style="display:none;">
+						<ul class="nav bs-sidenav card">
+							<li >
+              <div class="cardmain">
+                <div class="cheader">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="col-sm-1 cleft">
+                        {% avatar fcardusername 30 %}
+                      </div>
+                      <div class="col-sm-11 cright">
+                        <span class="cardtitle"><small >{{ fcarduserusername }}</small></span>
+                        <span class="cardinfo"><small id="tmpdate"></small></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+								<hr class="cardivi">
+                <div class="cardetail">
+                  <div class="row">
+                    <div class="col-sm-12" id="tmpcontext">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </li>
+            </ul>
+          </div>
+          <div id="fcards">
+          {% for j in page_obj %}
+					<div class="bs-sidebar fcard" role="complementary">
+						<ul class="nav bs-sidenav card">
+							<li >
+              <div class="cardmain">
+                <div class="cheader">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="col-sm-1 cleft">
+                        {% avatar j.carduser 30 %}
+                      </div>
+                      <div class="col-sm-11 cright">
+                        <span class="cardtitle"><small >{{ j.carduser }}</small></span>
+                        <span class="cardinfo"><small id="date_{{ forloop.counter0 }}">{{ j.getpubdate }}</small></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+								<hr class="cardivi">
+                <div class="cardetail">
+                  <div class="row">
+                    <div class="col-sm-12" id="context_{{ forloop.counter0 }}">
+                    {% autoescape off %}
+                    {{ j.context }}
+                    {% endautoescape %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </li>
+            </ul>
+          </div>
+          {% endfor %}
+        {% endblock %}
+          {% block pagination %}
+          <ul class="pagination" style="margin-top:100px;">
+            {% if page_obj.has_previous %}
+            <li ><a href="{{ request.path }}?page={{ page_obj.previous_page_number }}"><i class="fa fa-arrow-circle-left"></i></a></li>
+            {% endif %}
+            {% if pageheadot %}
+            <li ><a href="{{ request.path }}?page=1">1</a></li>
+            <li class="disable"><a href="#">...</a></li>
+            {% endif %}
+            {% for z in phead %}
+            <li ><a href="{{ request.path }}?page={{ z }}">{{ z }}</a></li>
+            {% endfor %} 
+            <li class="active"><a href="{{ request.path }}?page={{ z }}">{{ page_obj.number }}</a></li>
+            {% for k in ptail %}
+            <li ><a href="{{ request.path }}?page={{ k }}">{{ k }}</a></li>
+            {% endfor %}
+            {% if pagetaildot %}
+            <li class="disable"><a href="#">...</a></li>
+            <li ><a href="{{ request.path }}?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
+            {% endif %}
+            {% if page_obj.has_next %}
+            <li ><a href="{{ request.path }}?page={{ page_obj.next_page_number }}"><i class="fa fa-arrow-circle-right"></i></a></li>
+            {% endif %}
+          </ul>
+        </div>
+          {% endblock %}
+          {% block extra_js %}
+          <script src="/static/js/raphael.js"></script>
+          <script src="/static/js/morris.js"></script>
+          <script src="/static/js/fcardinfo.js"></script>
+          {% endblock %}

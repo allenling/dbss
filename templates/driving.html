@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load avatar_tags %}
+{% block leftbar %}
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav">
+							<li ><a href="/">最近<i class="fa fa-star pull-right leftbaricon"></i></a></li>
+							<li class="active"><a href="/driving">Driving<i class="fa fa-dashboard pull-right leftbaricon"></i></a></li>
+							<li><a href="/tags">标签<i class="fa fa-tags pull-right leftbaricon"></i></a></li>
+							<li><a href="/users">大家<i class="fa fa-users pull-right leftbaricon"></i></a></li>
+						</ul>
+					</div>
+{% endblock %}
+{% block pagination %}
+          <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li ><a href="/driving/?page={{ page_obj.previous_page_number }}"><i class="fa fa-arrow-circle-left"></i></a></li>
+            {% endif %}
+            {% if pageheadot %}
+            <li ><a href="/driving/?page=1">1</a></li>
+            <li class="disable"><a href="#">...</a></li>
+            {% endif %}
+            {% for z in phead %}
+            <li ><a href="/driving/?page={{ z }}">{{ z }}</a></li>
+            {% endfor %} 
+            <li class="active"><a href="/driving/?page={{ z }}">{{ page_obj.number }}</a></li>
+            {% for k in ptail %}
+            <li ><a href="/driving/?page={{ k }}">{{ k }}</a></li>
+            {% endfor %}
+            {% if pagetaildot %}
+            <li class="disable"><a href="#">...</a></li>
+            <li ><a href="/driving/?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
+            {% endif %}
+            {% if page_obj.has_next %}
+            <li ><a href="/driving/?page={{ page_obj.next_page_number }}"><i class="fa fa-arrow-circle-right"></i></a></li>
+            {% endif %}
+          </ul>
+{% endblock %}

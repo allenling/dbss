@@ -1,0 +1,63 @@
+{% extends 'user_auth/private.html' %}
+{% load avatar_tags %}
+        {% block useremind %}
+        <div class="alert alert-success" data-dismiss="alert" id="joins" style="display:none;">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="alert alert-warning " data-dismiss="alert" id="joine" style="display:none;">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+        </div>
+        <div id="panetar" target-action="{% url 'user_auth:index' rquser.id %}" ></div>
+        {% endblock %}
+          {% block leftbar %}
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav" style="padding-top:0;">
+              <li ><a href="{% url 'user_auth:index' rquser.id %}" style="text-align:center;padding-left:0;padding-right:0;padding-top:0;margin-bottom:10px;">{% avatar rquser 190 %}</a></li>
+              <li ><a href="{% url 'user_auth:useredit' rquser.id %}">编辑<i class="fa fa-volume-up pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:index' rquser.id %}">动态<i class="fa fa-volume-up pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:myprivate' rquser.id %}">私密活动<i class="fa fa-pencil-square-o pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:mypublic' rquser.id %}">公开活动<i class="fa fa-external-link pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:mymessage' rquser.id %}">信息<i class="fa fa-envelope pull-right leftbaricon"></i></a></li>
+              <li class="active"><a href="{% url 'user_auth:myfriends' rquser.id %}">关注<i class="fa fa-group pull-right leftbaricon"></i></a></li>
+						</ul>
+					</div>
+        {% endblock %}
+        {% block rightcontent %}
+        <div class="row" style="margin-top:30px;">
+          <div class="col-sm-12">
+        {% block friendsconcerns %}
+        <ul class="nav nav-pills nav-justified">
+          <li class="active"><a href="{% url 'user_auth:myfriends' rquser.id %}">互相关注<i class="fa fa-chain pull-right toprelationicon" ></i></a></li>
+          <li ><a href="{% url 'user_auth:myconcerns' rquser.id %}">我的关注<i class="fa fa-plus-circle pull-right toprelationicon"></i></a></li>
+          <li ><a href="{% url 'user_auth:concernsme' rquser.id %}">关注我的<i class="fa fa-bookmark pull-right toprelationicon"></i></a></li>
+        </ul>
+        {% endblock %}
+          </div>
+        </div>
+        <div class="row" style="margin-top:30px;">
+        {% for i in object %}
+        <div class="col-sm-4 userwall">
+          <div class="col-sm-4 userinfo">
+            {% avatar i 50 %}
+          </div>
+          <div class="col-sm-8 useraction" style="padding-left:5px;padding-right:0px;">
+            <p >{{ i.username|slice:"9" }}</p>
+            {% if isowner %}
+            <span type="button" target="{{ i.id }}" target-name="{{ i.username }}" class="label label-warning"  onclick="friendaction({{ request.user.id }}, {{ i.id }});" id="check_{{ i.id }}">{% block friorcon %}<i class="fa fa-minus-circle" ></i>{% endblock %}</span>
+            <a href="{% url 'user_auth:smessage' rquser.id %}?name={{ i.username }}"><span type="button" class="label label-warning" ><i class="fa fa-comment-o leftbaricon"></i></span></a>
+            {% elif request.user.id != i.id %}
+            <span type="button" target="{{ i.id }}" target-name="{{ i.username }}" class="label label-warning"  onclick="friendaction({{ request.user.id }}, {{ i.id }});" id="check_{{ i.id }}">{% if i.isrefriend %}<i class="fa fa-users"></i>&nbsp;<i class="fa fa-minus-circle" ></i>{% elif i.rconcernme %}<i class="fa fa-minus-circle"></i>{% elif i.meconcernr  %}<i class="fa fa-bookmark"></i>&nbsp;<i class="fa fa-plus-circle"></i>{% else %}<i class="fa fa-plus-circle"></i>{% endif %}</span>
+            <a href="{% url 'user_auth:smessage' rquser.id %}?name={{ i.username }}"><span type="button" class="label label-warning" ><i class="fa fa-comment-o leftbaricon"></i></span></a>
+            {% endif %}
+          </div>
+            <div class="col-sm-12" style="margin-top:4px;padding-left:0;padding-right:0;">
+              {{ i.get_something }}
+            </div>
+        </div>
+        {% endfor %}
+      </div>
+        {% endblock %}
+        {% block extra_js %}
+        <script src="/static/js/postcsrf.js"></script>
+        <script src="/static/js/friends.js"></script>
+        {% endblock %}

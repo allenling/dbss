@@ -1,0 +1,30 @@
+{% extends 'register1.html' %}
+{% load avatar_tags %}
+{% block bodycontent %}
+<div class="container mainrow registermain">
+  <div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <div class="bs-sidebar" role="complementary">
+        <ul class="nav bs-sidenav toptools" >
+          <li>
+          <div class="col-sm-12" style="margin-bottom:10px;text-align:center;background-color:#1abc9c;color:white;">
+            <h3 >Please Input Captcha</h3>
+          </div>
+          <div class="col-sm-12" style="margin-bottom:10px;">
+            <form action="{% url 'register' %}" method="post">
+              {{ wizard.management_form }}
+              {% csrf_token %}
+              {{ wizard.form }}
+              <input class="btn btn-success " type="submit" value="confirm">
+              <button class="btn btn-primary btn-xs" type="button" style="vertical-align:bottom;"><a href="/" style="color:white;text-decoration:none;">back to index</a></button>
+              <!--<input name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}/{% endif %}" type="hidden">-->
+              <input name="next" value="{{ next }}" type="hidden">
+            </form>
+          </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

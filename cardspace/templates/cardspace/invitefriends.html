@@ -1,0 +1,46 @@
+{% extends 'guys.html' %}
+{% load avatar_tags %}
+{% block extra_css %}
+<link href="/static/css/bootstrap-tagsinput.css" rel="stylesheet">
+{% endblock %}
+{% block mainpanl %}
+<div class="col-sm-12">
+<span class="label label-info">邀请朋友</span><small style="margin-left:6px;"><a href="{% url 'cardspace:cardinfo' pk %}">暂不邀请</a></small>
+</div>
+<span id="targetuser" target-url="{% url 'cardspace:cinvitefriendslist' pk request.user.id %} " style="display:none;"></span>
+{% endblock %}
+{% block userspanel %}
+<div class="row">
+  <div class="col-sm-12">
+    <form method="post" action="{% url 'cardspace:invitefriends' pk %}">
+      <div class="form-group">
+        <div class="col-sm-12">
+          <input id="id_towho" name="towho" type="text" value="{{ name }}" class="form-control"  data-role="tagsinput" placeholder="邀请好友" readonly /><br >
+      </div>
+      </div>
+      <div class="col-sm-12">
+      <input class="btn btn-danger btn-sm" type="submit" value="邀请" target="{{ pk }}" id="invite_card">
+    </div>
+    </form>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav">
+              <li >
+              <div class="row">
+                <div class="col-sm-12" id="friendslist">
+                </div>
+              </div>
+              </li>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock %}
+{% block extra_js %}
+<script src="/static/js/bootstrap-tagsinput.js"></script>
+<script src="{{ STATIC_URL }}js/utils.js"></script>
+<script src="{{ STATIC_URL }}js/cinvitefriends.js"></script>
+{% endblock %}

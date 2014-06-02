@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+<script src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+<link href="/static/css/cardinfo.css" rel="stylesheet">
+{% endblock %}
+{% load avatar_tags %}
+      {% block bread %}
+
+          {% if card.isclose == True %}
+                <div class="row" style="margin-top:30px;">
+                  <div class="col-sm-12">
+                    <div class="alert alert-warning">
+                      <h2 ><strong >该活动已经关闭</strong></h2>
+                    </div>
+                  </div>
+                </div>
+          {% endif %}
+      {% endblock %}
+          {% block leftbar %}
+          {% if card.isclose == False and show_rich == False %}
+          <button type"button" class="btn btn-primary cardaction" style="margin-top:30px;" id="join" target-url="{% url 'cardspace:joincard' card.id %}" target = {{ card.id }}>加入活动</button>
+          {% elif card.isclose == False and show_rich == True %}
+          <button type"button" class="btn btn-warning cardaction" style="margin-top:30px;" id="quit" target-url="{% url 'cardspace:quitcard' card.id %}" target = {{ card.id }}>退出活动</button>
+          {% endif %}
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav" >
+              <li {% if mode  == 'latest' %}class="active"{% endif %}><a href="{% url 'cardspace:cardinfo' card.id  %}">最新更新<i class="fa fa-star pull-right leftbaricon"></i></a></li>
+              <li {% if mode  == 'driving' %}class="active"{% endif %}><a href="{% url 'cardspace:cardinfod' card.id %}">Driving<i class="fa fa-dashboard pull-right leftbaricon"></i></a></li>
+              {% if card.isclose == False and show_rich %}<li ><a href="{% url 'cardspace:invitefriends' card.id %}"><strong>邀请朋友</strong></a></li>{% endif %}
+						</ul>
+					</div>
+        {% endblock %}
+        {% block otherleftbar %}
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav">
+              <li class="active"><a href="/tags"><i class="fa fa-tags fa-lg"></i><span class="pull-right">标签</span></a></li>
+              {% for k in card.tags.all %}
+              <li ><a class="cardinfotags" href="/">{{ k.getname }}</a></li>
+              {% endfor %}
+						</ul>
+					</div>
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav">
+              <li class="active"><a href="#"><i class="fa fa-user fa-lg leftbaricon"></i><span class="pull-right">{{ card.getusercount }}</span></a></li>
+             {% if card.getusercount > 0 %}
+             {% for i in card.get_first_ten_users %}
+             <li >
+             <a href="{% url 'user_auth:index' i.id %}" >{% avatar i 30 %}{{ i.get_full_name|slice:":8" }}</a>
+             </li>
+             {% endfor %}
+             {% endif %}
+						</ul>
+					</div>
+        {% endblock %}
+        {% block rightcontent %}
+					<div class="bs-sidebar" role="complementary">
+						<ul class="nav bs-sidenav card">
+							<li >
+              <div class="cardmain">
+                <div class="cheader">
+                  <div class="row">
+                    <div class="col-sm-12">
+                  <div class="col-sm-1 cleft">
+                    {% avatar card.carduser 30 %}
+                  </div>
+                  <div class="col-sm-11 cright">
+                    <span class="cardtitle">{{ card.getitle }}</span>
+                    <span class="cardinfo"><small >{{ card.carduser }}</small>&nbsp;&nbsp;<small class="carddate"><i class="fa fa-calendar"></i>&nbsp;{{ card.getpubdate }}</small></span>
+                  </div>
+                  </div>
+                  </div>
+                </div>
+								<hr class="cardivi">
+                <div class="cardetail">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      {% autoescape off %}
+                      {{ card.context }}
+                      {% endautoescape %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </li>
+            </ul>
+          </div>
+          {% for j in page_obj %}
+					<div class="bs-sidebar" role="complementary">
+						<ul class="nav bs-sidenav card">
+							<li >
+              <div class="cardmain">
+                <div class="cheader">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="col-sm-1 cleft">
+                        {% avatar j.carduser 30 %}
+                      </div>
+                      <div class="col-sm-11 cright">
+                        <span class="cardtitle"><small >{{ j.carduser }}</small>{% if j.carduser.get_somthing %}&nbsp;&nbsp;<small ><strong >{{ j.carduser.get_somthing }}</strong></small>{% endif %}</span>
+                        <span class="cardinfo"><small >{{ j.getpubdate }}</small></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+								<hr class="cardivi">
+                <div class="cardetail">
+                  <div class="row">
+                    <div class="col-sm-12">
+                    {% autoescape off %}
+                    {{ j.context }}
+                    {% endautoescape %}
+                    </div>
+                  </div>
+                </div>
+								<hr class="cardivi">
+                <a style="text-decorator:none" href="{% url 'cardspace:fcard_info' card.id j.carduser.id %}"><i class="fa fa-book fa-lg pull-right fcardmore" style="margin-top:6px;"></i></a>
+                <i class="fa fa-heart fa-large listaction" method="blacklist" id="b_{{ j.id }}" action="add" style="color:black;"></i><i class="fa fa-heart-o fa-large listaction" action="add" method="whitelist" id="w_{{ j.id }}" style="margin-left:5px;"></i>
+              </div>
+              </li>
+            </ul>
+          </div>
+          {% endfor %}
+        {% endblock %}
+          {% block pagination %}
+          <ul class="pagination" style="margin-top:100px;">
+            {% if page_obj.has_previous %}
+            <li ><a href="{{ request.path }}?page={{ page_obj.previous_page_number }}"><i class="fa fa-arrow-circle-left"></i></a></li>
+            {% endif %}
+            {% if pageheadot %}
+            <li ><a href="{{ request.path }}?page=1">1</a></li>
+            <li class="disable"><a href="#">...</a></li>
+            {% endif %}
+            {% for z in phead %}
+            <li ><a href="{{ request.path }}?page={{ z }}">{{ z }}</a></li>
+            {% endfor %} 
+            <li class="active"><a href="{{ request.path }}?page={{ z }}">{{ page_obj.number }}</a></li>
+            {% for k in ptail %}
+            <li ><a href="{{ request.path }}?page={{ k }}">{{ k }}</a></li>
+            {% endfor %}
+            {% if pagetaildot %}
+            <li class="disable"><a href="#">...</a></li>
+            <li ><a href="{{ request.path }}?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
+            {% endif %}
+            {% if page_obj.has_next %}
+            <li ><a href="{{ request.path }}?page={{ page_obj.next_page_number }}"><i class="fa fa-arrow-circle-right"></i></a></li>
+            {% endif %}
+          </ul>
+          {% if card.isclose == False and show_rich %}
+          <form action="{% url 'cardspace:updatefcard' card.id fcard_id %}" method="post">
+            <div class="update_area">
+              {% csrf_token %}
+              {{ updateform }}
+              <input type="hidden" value="{{ mode }}" name="currentmode" >
+              <p >
+              <input type="submit" class="btn btn-primary pull-right" value="update"/>
+              </p>
+              {{ forms.context.errors }}
+            </div>
+          </form>
+          {% endif %}
+          {% endblock %}
+          {% block extra_js %}
+          <script src="/static/js/cardinfo.js"></script>
+          {% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'user_auth/index.html' %}
+{% load avatar_tags %}
+          {% block leftbar %}
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav" style="padding-top:0;">
+              <li ><a href="{% url 'user_auth:index' rquser.id %}" style="text-align:center;padding-left:0;padding-right:0;padding-top:0;margin-bottom:10px;">{% avatar rquser 190 %}</a></li>
+              <li class="active"><a href="{% url 'user_auth:edit' rquser.id %}">编辑<i class="fa fa-volume-up pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:index' rquser.id %}">动态<i class="fa fa-volume-up pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:myprivate' rquser.id %}">私密活动<i class="fa fa-pencil-square-o pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:mypublic' rquser.id %}">公开活动<i class="fa fa-external-link pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:mymessage' rquser.id %}">信息<i class="fa fa-envelope pull-right leftbaricon"></i></a></li>
+              <li ><a href="{% url 'user_auth:myfriends' rquser.id %}">关注<i class="fa fa-group pull-right leftbaricon"></i></a></li>
+						</ul>
+					</div>
+        {% endblock %}
+{% block rightcontent %}
+
+        <form action="{% url 'user_auth:cpwd' rquser.id  %}" method="post" >
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="oldpwd">原密码</label>
+            <input class="form-control" type="password" maxlength="4096" name="old_password" id="id_old_password">
+          </div>
+          <div class="form-group">
+            <label for="pwd1">新密码</label>
+            <input class="form-control" type="password" maxlength="4096" name="new_password1" id="id_new_password1">
+          </div>
+          <div class="form-group">
+            <label for="pwd2">确认密码</label>
+            <input class="form-control" type="password" maxlength="4096" name="new_password2" id="id_new_password2">
+          </div>
+          <input type="hidden" name="next" value="{{ request.path }}" />
+          <p style="text-align:center;"><input type="submit" class="btn btn-warning" value="更新密码"/></p>
+        </form>
+{% endblock %}

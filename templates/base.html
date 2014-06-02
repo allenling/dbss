@@ -1,0 +1,231 @@
+{% load avatar_tags %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>DBSS</title>
+
+		<!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/static/css/font-awesome.min.css" rel="stylesheet">
+		<link href="/static/css/doc.css" rel="stylesheet">
+		<link href="/static/css/flat.css" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+
+
+		<!-- Custom styles for this template -->
+
+		<!-- Just for debugging purposes. Don't actually copy this line! -->
+		<!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+    {% block bodycontent %}
+		<!-- Static navbar -->
+		<div class="navbar navbar-inverse navbar-static-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/">WhySoS</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li ><a href="/">首页</a></li>
+            <li><a id="toplogin"href="/account/login/?next={% if request.GET.next %}{{ request.GET.next }}{% elif  request.get_full_path == '/register/' %}/{% else %}{{ request.get_full_path }}{% endif %}">登陆</a></li>
+            <li><a href="/register/?next={% if request.GET.next %}{{ request.GET.next }}{% elif  request.get_full_path == '/register/' %}/{% else %}{{ request.get_full_path }}{% endif %}">注册</a></li>
+            <li><a href="{% url 'createcard' %}" ><i class="fa fa-leaf fa-lg leftbaricon"></i></a></li>
+						<li style="width:350px;">
+            <form method="GET" action="{% url 'haystack_search' %}">
+							<div class="input-group" id="topsearch">
+                <input name="q" type="text" class="form-control" value="{{ query|escape }}">
+								<span class="input-group-addon"><i class="fa fa-search"></i></span>
+							</div>
+						</form>
+						</li>
+					</ul>
+          {% if request.user.is_authenticated == True %}
+					<ul class="nav navbar-nav navbar-right">
+            <li class="dropdown"><a href="#" class="drop-toggle" data-toggle="dropdown" id="topavatar">{% avatar request.user 30 %}<b class="caret"></b></a>
+						<ul class="dropdown-menu topdropmenu">
+              <li><a href="{% url 'user_auth:index' request.user.id %}"><i class="fa fa-user"></i></a></li>
+              <li><a href="/logout/?next={% if request.GET.next %}{{ request.GET.next }}{% elif  request.get_full_path == '/register/' %}/{% else %}{{ request.get_full_path }}{% endif %}"><i class="fa fa-sign-out"></i></a></li>
+						</ul>
+						</li>
+            <li><a href="{% url 'user_auth:mymessage' request.user.id %}" id="topmessage"><i class="fa fa-envelope fa-lg"></i></a></li>
+          </ul>
+          {% endif %}
+				</div><!--/.nav-collapse -->
+			</div>
+		</div>
+
+
+		<div class="container mainrow">
+
+      {% block mainrow %}
+      {% block searcharea %}
+      {% endblock %}
+      {% block bread %}
+      {% endblock %}
+			<!-- Main component for a primary marketing message or call to action -->
+			<div class="row" style="margin-bottom:100px;">
+        <div class="alert alert-success" data-dismiss="alert" id="joins" style="display:none;">
+        </div>
+        <div class="alert alert-warning " data-dismiss="alert" id="joine" style="display:none;">
+        </div>
+        <div id="panetar"></div>
+				<div class="col-sm-3">
+          {% block leftbar %}
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav">
+              <li class="active"><a href="/">最近<i class="fa fa-star pull-right leftbaricon"></i></a></li>
+							<li ><a href="/driving">Driving<i class="fa fa-dashboard pull-right leftbaricon"></i></a></li>
+							<li><a href="/tags">标签<i class="fa fa-tags pull-right leftbaricon"></i></a></li>
+							<li><a href="/users">大家<i class="fa fa-users pull-right leftbaricon"></i></a></li>
+						</ul>
+					</div>
+        {% endblock %}
+        {% block otherleftbar %}
+        {% endblock %}
+        </div>
+				<div class="col-sm-9">
+          {% block rightcontent %}
+          {% for i in cardobject %}
+					<div class="bs-sidebar" role="complementary">
+						<ul class="nav bs-sidenav card">
+							<li >
+							<div class="cardmain">
+								<div class="cheader">
+									<div class="col-sm-1 cleft">
+                    {% avatar i.carduser 30 %}
+									</div>
+									<div class="col-sm-11 cright">
+                    <span class="cardtitle"><a href="{% url 'cardspace:cardinfo' i.id %}">{{ i.getitle }}</a></span>
+                    <span class="cardtitle"><small >{{ i.carduser.get_full_name|slice:":10" }}</small>&nbsp;&nbsp;{% if i.getusercount != '' %}<small class="cardusercount"><i class="fa fa-user"></i>&nbsp;{% if i.getusercount|trans_for_number > 99 %}99+{% else %}{{ i.getusercount }}{% endif %}</small>&nbsp;{% endif %}<small class="carddate"><i class="fa fa-calendar"></i>&nbsp;{{ i.getpubdate }}</small></span>
+                      <span class="cardinfo"><strong >#</strong>{% for j in i.getagstxt %}<small class="cardtag">{{ j }}</small>&nbsp;{% endfor %}</span>
+										<hr class="cardivi">
+									</div>
+								</div>
+                {% if i.getrecent %}
+								<div class="crecently">
+									<div class="col-sm-1 cleft">
+                    {% avatar i.getrecent.carduser 30 %}
+									</div>
+									<div class="col-sm-11 cright recentcontext">
+                    {% if i.getrecent.get_context_thumb.0 == 'img' %}
+                    <div class="col-sm-2" style="padding-left:0;padding-right:0;">
+                      <div class="thumbnail" style="padding:0;margin-bottom:0;border:0;">
+                        {% autoescape off %}
+                        {{ i.getrecent.get_context_thumb.1 }}
+                        {% endautoescape %}
+                      </div>
+                    </div>
+                    <div class="col-sm-10">
+                    {{ i.getrecent.get_context_thumb.2 }}
+                    </div>
+                    {% elif i.getrecent.get_context_thumb.0 == 'embed' %}
+                    <div class="col-sm-2" style="min-height:80px;padding:0;margin:0;text-align:center;background-color:#ededef;">
+                    <a href="{{ i.getrecent.get_context_thumb.1 }}" target="_blank"><i class="fa fa-play fa-3x" style="margin-top:25px;"></i></a>
+                    </div>
+                    <div class="col-sm-10">
+                      <p>{{ i.getrecent.get_context_thumb.2 }}</p>
+                    </div>
+                    {% else %}
+                    <div class=col-sm-12">
+                      <p>{{ i.getrecent.get_context_thumb.2 }}</p>
+                    </div>
+                    {% endif %}
+									</div>
+                </div>
+                {% else %}
+								<div class="crecently">
+									<div class="col-sm-1 cleft">
+                  </div>
+									<div class="col-sm-11 cright recentcontext">
+                    {% if i.get_context_thumb.0 == 'img' %}
+                    <div class="col-sm-2" style="padding-left:0;padding-right:0;">
+                      <div class="thumbnail" style="padding:0;margin-bottom:0;border:0;">
+                        {% autoescape off %}
+                        {{ i.get_context_thumb.1 }}
+                        {% endautoescape %}
+                      </div>
+                    </div>
+                    <div class="col-sm-10">
+                    {{ i.get_context_thumb.2 }}
+                    </div>
+                    {% elif i.get_context_thumb.0 == 'embed' %}
+                    <div class="col-sm-2" style="min-height:80px;padding:0;margin:0;text-align:center;background-color:#ededef;">
+                    <a href="{{ i.getrecent.get_context_thumb.1 }}" target="_blank"><i class="fa fa-play fa-3x" style="margin-top:25px;"></i></a>
+                    </div>
+                    <div class="col-sm-10">
+                      <p>{{ i.get_context_thumb.2 }}</p>
+                    </div>
+                    {% else %}
+                    <div class=col-sm-12">
+                      <p>{{ i.get_context_thumb.2 }}</p>
+                    </div>
+                    {% endif %}
+									</div>
+                </div>
+                {% endif %}
+							</div>
+							</li>
+						</ul>
+					</div>
+          {% endfor %}
+          {% endblock %}
+          {% block pagination %}
+          <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li ><a href="{{ request.path }}?page={{ page_obj.previous_page_number }}"><i class="fa fa-arrow-circle-left"></i></a></li>
+            {% endif %}
+            {% if pageheadot %}
+            <li ><a href="{{ request.path }}?page=1">1</a></li>
+            <li class="disable"><a href="#">...</a></li>
+            {% endif %}
+            {% for z in phead %}
+            <li ><a href="{{ request.path }}?page={{ z }}">{{ z }}</a></li>
+            {% endfor %} 
+            <li class="active"><a href="{{ request.path }}?page={{ z }}">{{ page_obj.number }}</a></li>
+            {% for k in ptail %}
+            <li ><a href="{{ request.path }}?page={{ k }}">{{ k }}</a></li>
+            {% endfor %}
+            {% if pagetaildot %}
+            <li class="disable"><a href="#">...</a></li>
+            <li ><a href="{{ request.path }}?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
+            {% endif %}
+            {% if page_obj.has_next %}
+            <li ><a href="{{ request.path }}?page={{ page_obj.next_page_number }}"><i class="fa fa-arrow-circle-right"></i></a></li>
+            {% endif %}
+          </ul>
+          {% endblock %}
+      </div>
+    </div>
+    {% endblock %}
+
+		</div> <!-- /container -->
+    {% endblock %}
+
+
+		<!-- Bootstrap core JavaScript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="/static/js/jquery-1.10.1.js"></script>
+		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    {% block extra_js %}{% endblock %}
+	</body>
+</html>
