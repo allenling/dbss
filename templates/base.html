@@ -50,7 +50,7 @@
             <li><a href="/register/?next={% if request.GET.next %}{{ request.GET.next }}{% elif  request.get_full_path == '/register/' %}/{% else %}{{ request.get_full_path }}{% endif %}">注册</a></li>
             <li><a href="{% url 'createcard' %}" ><i class="fa fa-leaf fa-lg leftbaricon"></i></a></li>
 						<li style="width:350px;">
-            <form method="GET" action="{% url 'haystack_search' %}">
+            <form method="GET" action="{% url 'search' %}">
 							<div class="input-group" id="topsearch">
                 <input name="q" type="text" class="form-control" value="{{ query|escape }}">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>

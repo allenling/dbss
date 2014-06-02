@@ -7,6 +7,7 @@ admin.autodiscover()
 from dbss.views import IndexPage, DrivingPage, TagsPage, UsersPage, logout_user, ReUserWizard, FORMS,\
         CreateCard, WSearchView, TagCardPage, TagCardPageD
 
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'mysite.views.home', name='home'),
@@ -23,13 +24,12 @@ urlpatterns = patterns('',
     url(r'^tags/(?P<tpk>\d+)/$',TagCardPage.as_view(), name = 'tagcard'),
     url(r'^tags/(?P<tpk>\d+)/driving/$',TagCardPageD.as_view(), name = 'tagcardd'),
     url(r'^users/$',UsersPage.as_view(), name = 'userspage'),
-    url(r'^search/$',include('haystack.urls' ),),
     url(r'^user/(?P<userpk>\d+)/',include('dbss.user_auth.urls',namespace='userspace', app_name='user_auth')),
     url(r'^card/(?P<pk>\d+)/',include('dbss.cardspace.urls',namespace='cardspace', app_name='cardspace')),
     url(r'^logout/$',logout_user, name='logout'),
     url(r'^register/$',ReUserWizard.as_view(FORMS), name = 'register'),	
     url(r'^createcard/$',CreateCard.as_view(), name = 'createcard'),	
-    #url(r'^search/$',WSearchView(), name = 'search'),	
+    url(r'^search/$',WSearchView(), name = 'search'),	
 )
 
 urlpatterns+=patterns('',
@@ -57,7 +57,3 @@ urlpatterns +=patterns('',
 urlpatterns +=patterns('',
     url(r'^admin/rq/',include('django_rq_dashboard.urls')),
 )
-'''
-urlpatterns +=patterns('',
-    url(r'^search/',include('haystack.urls')),
-)'''

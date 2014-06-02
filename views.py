@@ -25,7 +25,9 @@ from haystack.views import SearchView
 from registration.models import RegistrationProfile
 
 from dbss.utils import MyPaginate, distr_object,  newfavlist
-from dbss.myform.registerform import ReUserForm1, ReUserForm3 
+from dbss.myform.registerform import ReUserForm1, ReUserForm3
+from dbss.myform.searchform import SearchForm
+
 
 from dbss.user_auth.models import MyUser as User
 from dbss.user_auth.models import UserFollow
@@ -245,6 +247,7 @@ class WSearchView(SearchView):
     }
 
     def build_form(self, form_kwargs = None):
+        self.form_class = SearchForm
         new_request_get = self.request.GET.copy()
         kwargs = {}
         new_request_get.setlist('models',new_request_get.getlist('m'))
