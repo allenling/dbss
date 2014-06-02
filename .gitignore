@@ -1,0 +1,4 @@
+*.pyc
+email_settings.py
+static/*
+whoosh_index/*
