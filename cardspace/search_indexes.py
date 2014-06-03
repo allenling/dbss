@@ -20,6 +20,7 @@ class TagIndex(indexes.SearchIndex, indexes.Indexable):
 
     text = indexes.CharField(document = True, use_template = True)
     tag = indexes.CharField(model_attr = 'tag')
+    allc = indexes.IntegerField(model_attr = 'allc')
 
     def get_model(self):
         return CardTag

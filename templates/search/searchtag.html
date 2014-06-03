@@ -9,5 +9,21 @@
 					</div>
 {% endblock %}
 {% block rightcontent %}
-{{ page.object_list }}
+{% if query and page.object_list.0 != None %}
+{% for i in page.object_list %}
+<div class="tagconetnt" >
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav">
+              <div class="row">
+                <div class="col-sm-6 tagitem">
+                  <a href="{% url 'tagcard' i.pk %}" style="text-decoration:none;"><span class="label label-warning">{{ i.tag }}</span>&nbsp;&nbsp;<span class="badge">{{ i.allc }}</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+{% endfor %}
+{% else %}
+<h3 >没有找到符合条件的活动标签</h3>
+{% endif %}
 {% endblock %}

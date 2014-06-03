@@ -17,10 +17,6 @@
 					</div>
 {% endblock %}
 {% block rightcontent %}
-            <form method="GET" action="{% url 'haystack_search' %}">
-              {{ form.as_table }}<br />
-              <input type="submit" value="search"/>
-						</form>
 {% if query and page.object_list.0 != None %}
 {% for i in page.object_list %}
 					<div class="bs-sidebar" role="complementary">
@@ -106,7 +102,7 @@
 					</div>
 {% endfor %}
 {% else %}
-<h3 >No Results </h3>
+<h3 >没有找到符合条件的活动卡</h3>
 {% endif %}
 {% endblock %}
           {% block pagination %}
