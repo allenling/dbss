@@ -35,6 +35,12 @@ class MyPaginate(object):
             self.ptail = range(nowpage+1,page_num+1)
             self.pagetaildot = False
 
+    def generate_page(self, context_data):
+        context_data['phead'] = self.phead
+        context_data['pageheadot'] = self.pageheadot
+        context_data['ptail'] = self.ptail
+        context_data['pagetaildot'] = self.pagetaildot
+
 class FcardUtils(object):
     '''
     fcard utils

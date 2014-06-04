@@ -117,7 +117,8 @@ class UsersPage(ListView):
 
     def get_context_data(self, **kwargs):
         context_data = super(UsersPage, self).get_context_data(**kwargs)
-        map(self.getrequestfri, context_data['object_list'])
+        if self.request.user.is_anonymous() == False:
+            map(self.getrequestfri, context_data['object_list'])
         return context_data
 
 def logout_user(request):
@@ -162,7 +163,6 @@ class ReUserWizard(SessionWizardView):
             site = RequestSite(self.request)
         RegistrationProfile.objects.create_inactive_user(username, email, password, site)
         return HttpResponseRedirect(reverse('registration_complete'))
-
 
 class CreateCard(CreateView):
 
@@ -245,6 +245,7 @@ class WSearchView(SearchView):
         '456': {'model': 'cardspace.cardtag', 'template_name': 'search/searchtag.html'},
         '789': {'model': 'user_auth.myuser', 'template_name': 'search/searchuser.html'},
     }
+    isuser = False
 
     def build_form(self, form_kwargs = None):
         self.form_class = SearchForm
@@ -265,6 +266,8 @@ class WSearchView(SearchView):
         except AttributeError:
             raise Http404
         self.template = self.model_map_int.get(models_num[0]).get('template_name')
+        if models_num[0] == '789':
+            self.isuser = True
 
         kwargs['load_all'] = self.load_all
         new_request_get.setlist('models', tmp)
@@ -272,6 +275,11 @@ class WSearchView(SearchView):
             kwargs.update(form_kwargs)
 
         return self.form_class(new_request_get, **kwargs)
+
+    def getrequestfri(self, fobj):
+		fobj.object.isrequestfriend(self.request.user)
+		fobj.object.meconcernrequest(self.request.user)
+		fobj.object.requestconcernme(self.request.user)
 
     def create_response(self):
         (paginator ,page) = self.build_page()
@@ -283,10 +291,9 @@ class WSearchView(SearchView):
             'suggestion':None,
         }
         temp_page = MyPaginate(page.number, paginator.num_pages)
-        context_data['phead'] = temp_page.phead
-        context_data['pageheadot'] = temp_page.pageheadot
-        context_data['ptail'] = temp_page.ptail
-        context_data['pagetaildot'] = temp_page.pagetaildot
+        temp_page.generate_page(context_data)
+        if self.isuser:
+            map(self.getrequestfri, context_data['page'])
         return render_to_response(self.template, context_data, context_instance=self.context_class(self.request))
 
 def test(request):

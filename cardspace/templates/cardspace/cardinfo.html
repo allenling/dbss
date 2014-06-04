@@ -18,9 +18,9 @@
       {% endblock %}
           {% block leftbar %}
           {% if card.isclose == False and show_rich == False %}
-          <button type"button" class="btn btn-primary cardaction" style="margin-top:30px;" id="join" target-url="{% url 'cardspace:joincard' card.id %}" target = {{ card.id }}>加入活动</button>
+          <button type"button" class="btn btn-primary cardaction" style="margin-top:30px;" id="joincard" target = {{ card.id }}>加入活动</button>
           {% elif card.isclose == False and show_rich == True %}
-          <button type"button" class="btn btn-warning cardaction" style="margin-top:30px;" id="quit" target-url="{% url 'cardspace:quitcard' card.id %}" target = {{ card.id }}>退出活动</button>
+          <button type"button" class="btn btn-warning cardaction" style="margin-top:30px;" id="quitcard" target = {{ card.id }}>退出活动</button>
           {% endif %}
 					<div class="bs-sidebar leftbar" role="complementary" >
 						<ul class="nav bs-sidenav" >
@@ -160,5 +160,6 @@
           {% endif %}
           {% endblock %}
           {% block extra_js %}
+        <script src="/static/js/postcsrf.js"></script>
           <script src="/static/js/cardinfo.js"></script>
           {% endblock %}

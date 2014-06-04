@@ -5,7 +5,6 @@ import pickle
 from datetime import datetime
 
 from django.conf import settings
-from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F,Q
@@ -18,16 +17,11 @@ from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit  import CreateView
 
 from rest_framework.generics import ListAPIView
-from rest_framework.views import APIView
-from rest_framework import permissions
-from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer
 
 import django_rq
 from redis_cache import get_redis_connection
 
-
-from dbss.utils import MyPaginate, distr_object, updatefcard, newfavlist,deletefavlist, send_message
+from dbss.utils import MyPaginate, distr_object, updatefcard, send_message
 from dbss.cardspace.serializers import UserSnapshoot, CinviteFriends, FcardSerializer
 from dbss.cardspace.forms.cardspaceform import FCardNewForm
 from dbss.cardspace.models import Card, Fcard
@@ -151,47 +145,7 @@ class CinviteFriendsList(BaseCardViewMixin, InviteFriendsList):
 
         return super(CinviteFriendsList, self).get(request, *args, **kwargs)
 
-class JoinCard(BaseCardViewMixin, APIView):
-
-    permission_classes = (permissions.IsAuthenticated,)
-    render_classes = (JSONRenderer,)
-    allowclose = False
-
-    def get(self, request, *args,  **kwargs):
-        cardobj = self.get_object()
-        try :
-            cardobj.users.get(id = request.user.id)
-            request.user.is_active = False
-            request.user.save()
-            logout(request)
-            content = {'type':'error', 'msg': 'do not join again,you had joined this Card! and we will frozen you account.'}
-        except User.DoesNotExist:
-            cardobj.users.add(request.user)
-            newfavlist(request.user.id, cardobj.id)
-            content = {'type':'success', 'msg':'join success'}
-        return Response(content)
-
-class QuitCard(JoinCard):
-
-    def get(self, request, *args, **kwargs):
-
-        try :
-            cardobj = self.get_object()
-            cardobj.users.get(pk = request.user.id)
-            cardobj.users.remove(request.user)
-            deletefavlist(request.user.id, cardobj.id)
-            content = {'type':'success', 'msg':'quit success'}
-        except User.DoesNotExist:
-            request.user.is_active = False
-            request.user.save()
-            logout(request)
-            content = {'type':'error', 'msg': 'do not  quit, you were not in this card! and we will frozen you account.'}
-        except Exception,e:
-            cardobj.users.add(request.user)
-            content = {'type':'error', 'msg': 'some errors occur, srroy!'}
-
-        return Response(content)
-class BlackList(JoinCard):
+class BlackList(BaseCardViewMixin, View):
 
     def get(self, request, *args, **kwargs):
         raise Http404
@@ -199,7 +153,7 @@ class BlackList(JoinCard):
     def post(self, request, *args, **kwargs):
         pass
 
-class WhiteList(JoinCard):
+class WhiteList(BlackList, View):
 
     def get(self, request, *args, **kwargs):
         raise Http404
@@ -301,7 +255,6 @@ class FCardInfo(BaseCardViewMixin, ListView):
         context_data['card'] = self.object
         context_data['fcardusername'] = self.fcarduser
         return context_data
-
 
 class InviteFriends(BaseCardViewMixin, View):
 

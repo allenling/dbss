@@ -112,7 +112,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
      'django.middleware.clickjacking.XFrameOptionsMiddleware',
      'corsheaders.middleware.CorsMiddleware',
-	'dbss.mymiddleware.myapploginrequired.MyappLoginRequired',
+	#'dbss.mymiddleware.myapploginrequired.MyappLoginRequired',
 )
 
 ROOT_URLCONF = 'dbss.urls'
@@ -152,6 +152,7 @@ INSTALLED_APPS = (
     'corsheaders',
 	'dbss.user_auth',
 	'dbss.cardspace',
+	'dbss.action',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -209,13 +210,14 @@ HAYSTACK_CONNECTIONS = {
 
 AUTH_USER_MODEL='user_auth.MyUser'
 REQUIRED_LOGIN_PATH='/login/'
+LOGIN_URL = '/account/login/'
 TEMPLATE_CONTEXT_PROCESSORS= global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
 	'django.core.context_processors.request',
 	'django.contrib.auth.context_processors.auth',
 )
 
 LOGIN_REQUIRED_APP = []
-LOGIN_REQUIRED_NAME = ['updatefcard', 'createcard', 'invitefriends', 'friendslist','joincard','quitcard',]
+LOGIN_REQUIRED_NAME = ['friendslist',]
 DEFAULT_CHARSET="utf-8"
 CKEDITOR_UPLOAD_PATH = 'upload/'
 CKEDITOR_CONFIGS = {

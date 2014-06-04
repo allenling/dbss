@@ -6,7 +6,6 @@ import simplejson
 from django.conf import settings
 from django.contrib.auth.views import password_change
 from django.core.urlresolvers import reverse
-from django.db import transaction
 from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import ListView
@@ -16,9 +15,6 @@ from avatar.views import add
 
 from rest_framework import permissions
 from rest_framework.generics import ListAPIView
-from rest_framework.renderers import JSONRenderer
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 import django_rq
 from redis_cache import get_redis_connection
@@ -295,8 +291,7 @@ class FriendsPage(FeedPage):
 
     def get_context_data(self, **kwargs):
         context_data = super(FriendsPage, self).get_context_data(**kwargs)
-        if self.isowner == False:
-            map(self.getrequestfri, context_data['object'])
+        map(self.getrequestfri, context_data['object'])
         return context_data
 
 class ConcernPage(FriendsPage):
@@ -327,88 +322,6 @@ class ConcernmePage(ConcernPage):
         self.queryset = UserFollow.objects.prefetch_related('fuser__friends').filter(tuser = self.rquser)
         return self.queryset
 
-class UserAction(BaseUserMixin, APIView):
-
-    render_classes = (JSONRenderer,)
-    permission_classes = (permissions.IsAuthenticated,)
-    notemplate_name = ''
-
-    scontent = {'type':'success', 'msg':''}
-    econtent = {'type':'error', 'msg':''}
-
-    def get(self, request, *args,  **kwargs):
-        raise Http404
-
-    def post(self, request, *args, **kwargs):
-        self.getisowner(request, kwargs)
-        tuid = simplejson.loads(request.DATA.get('tuid'))
-        try:
-            targetuser = User.objects.get(pk=tuid)
-            self.action(targetuser)
-        except Exception,e:
-            content = self.econtent
-            content['msg']=str(e)
-        else:
-            content = self.scontent
-        return Response(content)
-
-    def action(self, targetuser):
-        try:
-            isf  = targetuser.isrefriend
-        except AttributeError:
-            targetuser.isrequestfriend(self.request.user)
-            isf  = targetuser.isrefriend
-        return isf
-
-class RemoveConcern(UserAction):
-    
-    @transaction.commit_on_success
-    def action(self, targetuser):
-        isf = super(RemoveConcern,self).action(targetuser)
-        if isf:
-            self.request.user.removefriends(targetuser)
-            self.request.user.requestconcern(targetuser)
-            self.scontent["msg"]="remove success!"
-            self.scontent["extra"]="bookmark"
-        else:
-            try:
-                iscon = targetuser.rconcernme
-            except AttributeError:
-                targetuser.requestconcernme(self.request.user)
-                iscon = targetuser.rconcernme
-            if  iscon:
-                targetuser.removerconcern(self.request.user)
-                self.scontent["msg"]="remove success!"
-                self.scontent["extra"]="plus"
-            else:
-                raise UserFollow.DoesNotExist
-
-class AddConcern(UserAction):
-    
-    @transaction.commit_on_success
-    def action(self, targetuser):
-        try:
-            iscon = targetuser.rconcernme
-        except AttributeError:
-            targetuser.requestconcernme(self.request.user)
-            iscon = targetuser.rconcernme
-        if iscon:
-            raise UserFollow.DoesNotExist
-        else:
-            try:
-                addfriends = targetuser.meconcernr
-            except AttributeError:
-                targetuser.meconcernrequest(self.request.user)
-                addfriends = targetuser.meconcernr
-            if addfriends:
-                targetuser.removeconcernr(self.request.user)
-                targetuser.addfriends(self.request.user)
-                self.scontent['msg']='add success!'
-                self.scontent["extra"]="users"
-            else:
-                targetuser.requestconcern(self.request.user)
-                self.scontent['msg']='add success!'
-                self.scontent["extra"]="minus"
 
 class EditProfile(BaseUserMixin, TemplateView):
 

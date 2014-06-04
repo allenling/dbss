@@ -2,7 +2,7 @@
 from django.conf.urls import patterns, url
 
 from dbss.user_auth.views import FeedPage, MessagePage, GetMessage, SendMessage, InviteFriendsList, PrivatePage,\
-        PublicPage, FriendsPage, ConcernPage, ConcernmePage, RemoveConcern, AddConcern, EditProfile, ChangeAvatar, ChangePwd
+        PublicPage, FriendsPage, ConcernPage, ConcernmePage, EditProfile, ChangeAvatar, ChangePwd
 
 urlpatterns = patterns('',
     # Examples:
@@ -26,6 +26,4 @@ urlpatterns = patterns('',
     url(r'^friends/$',FriendsPage.as_view(),name='myfriends'),
     url(r'^concerns/$',ConcernPage.as_view(),name='myconcerns'),
     url(r'^concernsm/$',ConcernmePage.as_view(),name='concernsme'),
-    url(r'^removeconcern/$',RemoveConcern.as_view(),name='rfriend'),
-    url(r'^addconcern/$',AddConcern.as_view(),name='afriend'),
 )

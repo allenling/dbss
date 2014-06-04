@@ -1,4 +1,6 @@
 {% extends 'search/search.html' %}
+{% load avatar_tags %}
+{% load mytemplatetags %}
 {% block leftbar %}
 					<div class="bs-sidebar leftbar" role="complementary" >
 						<ul class="nav bs-sidenav">
@@ -10,10 +12,44 @@
 {% endblock %}
 {% block rightcontent %}
 {% if query and page.object_list.0 != None %}
-{% for i in page.object_list %}
-{{ i }}
-{% endfor %}
+<div class="row">
+  <div class="col-sm-12">
+					<div class="bs-sidebar leftbar" role="complementary" >
+						<ul class="nav bs-sidenav">
+              <li >
+              <div class="row">
+                <div class="col-sm-12" >
+                  {% for i in page.object_list %}
+                <div class="col-sm-4 userswall">
+                  <div class="col-sm-3 userinfo">
+                    <a href="{% url 'user_auth:index' i.pk %}">{% avatar i.username 50 50 %}</a>
+                  </div>
+                  <div class="col-sm-9" style="padding-left:5px;padding-right:0;">
+                    <a href="{% url 'user_auth:index' i.pk %}"><p >{{ i.username }}</p></a>
+                    {% if request.user.is_anonymous %}
+                    <a href="{% url 'auth_login' %}?next={{ request.get_full_path }}"><span type="button" class="label label-warning"  id="check_{{ i.pk }}"><i class="fa fa-plus-circle"></i></span></a>
+                    <a href="{% url 'auth_login' %}?next={{ request.get_full_path }}"><span type="button" class="label label-warning" ><i class="fa fa-comment-o leftbaricon"></i></span></a>
+                    {% elif i.pk|str_eq_int:request.user.id == False%}
+                    <span type="button" target="{{ i.pk }}" target-name="{{ i.username }}" class="label label-warning"  onclick="friendaction({ i.pk }});" id="check_{{ i.pk }}">{% if i.object.isrefriend %}<i class="fa fa-users"></i>&nbsp;<i class="fa fa-minus-circle" ></i>{% elif i.object.rconcernme %}<i class="fa fa-minus-circle"></i>{% elif i.object.meconcernr  %}<i class="fa fa-bookmark"></i>&nbsp;<i class="fa fa-plus-circle"></i>{% else %}<i class="fa fa-plus-circle"></i>{% endif %}</span>
+                    <a href="{% url 'user_auth:smessage' request.user.id %}?name={{ i.username }}"><span type="button" class="label label-warning" ><i class="fa fa-comment-o leftbaricon"></i></span></a>
+                    {% endif %}
+                  </div>
+            <div class="col-sm-12" style="margin-top:4px;padding-left:0;padding-right:0;">
+              {{ i.something }}
+            </div>
+                </div>
+                {% endfor %}
+                </div>
+              </div>
+              </li>
+            </div>
+          </div>
+        </div>
 {% else %}
 <h3 >没有找到符合条件的用户</h3>
 {% endif %}
 {% endblock %}
+        {% block extra_js %}
+        <script src="/static/js/postcsrf.js"></script>
+        <script src="/static/js/friends.js"></script>
+        {% endblock %}

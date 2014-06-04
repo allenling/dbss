@@ -20,13 +20,13 @@
           </div>
           <div class="col-sm-8 useraction" style="padding-left:0px;padding-right:0px;">
             <p >{{ i.fuser.username|slice:"30" }}</p>
-            {% if isowner %}
-            <span type="button" target="{{ i.fuser.id }}" target-name="{{ i.fuser.username }}" class="label label-warning"  onclick="friendaction({{ request.user.id }}, {{ i.fuser.id }});" id="check_{{ i.fuser.id }}">{% block friorcon %}<i class="fa fa-plus-circle" ></i>{% endblock %}</span>
-            <a href="{% url 'user_auth:smessage' rquser.id %}?name={{ i.fuser.username }}"><span type="button" class="label label-warning" ><i class="fa fa-comment-o leftbaricon"></i></span></a>
-            {% elif request.user.id != i.fuser.id %}
-            <span type="button" target="{{ i.fuser.id }}" target-name="{{ i.fuser.username }}" class="label label-warning"  onclick="friendaction({{ request.user.id }}, {{ i.fuser.id }});" id="check_{{ i.fuser.id }}">{% if i.fuser.isrefriend %}<i class="fa fa-users"></i>&nbsp;<i class="fa fa-minus-circle" ></i>{% elif i.fuser.rconcernme %}<i class="fa fa-minus-circle"></i>{% elif i.fuser.meconcernr  %}<i class="fa fa-bookmark"></i>&nbsp;<i class="fa fa-plus-circle"></i>{% else %}<i class="fa fa-plus"></i>{% endif %}</span>
-            <a href="{% url 'user_auth:smessage' rquser.id %}?name={{ i.fuser.username }}"><span type="button" class="label label-warning" ><i class="fa fa-comment-o leftbaricon"></i></span></a>
-            {% endif %}
+                    {% if request.user.is_anonymous %}
+                    <a href="{% url 'auth_login' %}?next={{ request.get_full_path }}"><span type="button" class="label label-warning"  id="check_{{ i.pk }}"><i class="fa fa-plus-circle"></i></span></a>
+                    <a href="{% url 'auth_login' %}?next={{ request.get_full_path }}"><span type="button" class="label label-warning" ><i class="fa fa-comment-o leftbaricon"></i></span></a>
+                    {% elif request.user.id != i.pk %}
+                    <span type="button" target="{{ i.pk }}" target-name="{{ i.username }}" class="label label-warning"  onclick="friendaction({{ i.pk }});" id="check_{{ i.pk }}">{% if i.isrefriend %}<i class="fa fa-users"></i>&nbsp;<i class="fa fa-minus-circle" ></i>{% elif i.rconcernme %}<i class="fa fa-minus-circle"></i>{% elif i.meconcernr  %}<i class="fa fa-bookmark"></i>&nbsp;<i class="fa fa-plus-circle"></i>{% else %}<i class="fa fa-plus-circle"></i>{% endif %}</span>
+                    <a href="{% url 'user_auth:smessage' request.user.id %}?name={{ i.username }}"><span type="button" class="label label-warning" ><i class="fa fa-comment-o leftbaricon"></i></span></a>
+                    {% endif %}
           </div>
             <div class="col-sm-12" style="margin-top:4px;padding-left:0;padding-right:0;">
               {{ i.fuser.get_something }}
