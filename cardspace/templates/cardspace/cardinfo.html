@@ -18,7 +18,12 @@
       {% endblock %}
           {% block leftbar %}
           {% if card.isclose == False and show_rich == False %}
+          {% if request.user.is_anonymous %}
+          <a href="{% url 'auth_login' %}?next={{ request.path }}"><button type"button" class="btn btn-primary" style="margin-top:30px;" id="joincard" target = {{ 
+    card.id }}>加入活动</button></a>
+          {% else %}
           <button type"button" class="btn btn-primary cardaction" style="margin-top:30px;" id="joincard" target = {{ card.id }}>加入活动</button>
+          {% endif %}
           {% elif card.isclose == False and show_rich == True %}
           <button type"button" class="btn btn-warning cardaction" style="margin-top:30px;" id="quitcard" target = {{ card.id }}>退出活动</button>
           {% endif %}
