@@ -2,15 +2,15 @@
 # Django settings for dbss project.
 import os
 from django.conf import global_settings
-import dbss.email_settings
+import dbss.local_settings
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-DEFAULT_FROM_EMAIL = dbss.email_settings.DEFAULT_FROM_EMAIL
-EMAIL_HOST= dbss.email_settings.EMAIL_HOST
-EMAIL_PORT = dbss.email_settings.EMAIL_PORT
-EMAIL_HOST_USER = dbss.email_settings.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = dbss.email_settings.EMAIL_HOST_PASSWORD
+DEFAULT_FROM_EMAIL = dbss.local_settings.DEFAULT_FROM_EMAIL
+EMAIL_HOST= dbss.local_settings.EMAIL_HOST
+EMAIL_PORT = dbss.local_settings.EMAIL_PORT
+EMAIL_HOST_USER = dbss.local_settings.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = dbss.local_settings.EMAIL_HOST_PASSWORD
 
 
 ADMINS = (
@@ -24,8 +24,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'whysos',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'root',
-        'PASSWORD': '9884108',
+        'USER': dbss.local_settings.DBROOT,
+        'PASSWORD': dbss.local_settings.DBPWD,
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
@@ -60,7 +60,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = '/myweb/dbss/dbss/media/'
+MEDIA_ROOT = dbss.local_settings.MEDIA_ROOT
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -71,7 +71,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = '/myweb/dbss/dbss/static/'
+STATIC_ROOT = dbss.local_settings.STATIC_ROOT
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -94,7 +94,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'g_zu8$eh1_#gl+#isywn7_0*5__^xc1*bctm1hwu3s9@de$&yj'
+SECRET_KEY = dbss.local_settings.SECRET_KEY
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -120,14 +120,7 @@ ROOT_URLCONF = 'dbss.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'dbss.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-	'/myweb/dbss/dbss/templates/',
-	'/myweb/dbss/dbss/cardspace/templates/',
-	'/myweb/dbss/dbss/user_auth/templates/',
-)
+TEMPLATE_DIRS = dbss.local_settings.TEMPLATE_DIRS
 
 INSTALLED_APPS = (
     'django.contrib.auth',
