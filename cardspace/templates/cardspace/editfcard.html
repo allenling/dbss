@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+<script src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+<link href="/static/css/editfcard.css" rel="stylesheet">
+{% endblock %}
+{% block mainrow %}
+{% block bread %}
+<ol class="breadcrumb mybread">
+  <li ><a href="{% url 'cardspace:cardinfo' card.id %}">{{ card.title }}</a></li>
+  <li class=row"><a href="#">{{ fcardusername }}</a><li>
+</ol>
+{% endblock %}
+<div class="row" style="margin-top:30px;">
+  <div class="col-sm-12">
+<h1 style="margin-top:0;margin-bottom:20px;">{% block mainpanl %}<span class="label label-danger">Edit your fcard</span>{% endblock %}</h1>
+<form action="{% url 'cardspace:editfcard' card.id request.user.id %}" method="POST">
+  {% csrf_token %}
+{{ form }}
+<p >{{ forms.context.errors }}</p>
+<p ><button type="submit" class="btn btn-success pull-right">update</button></p>
+</form>
+</div>
+</div>
+{% endblock %}

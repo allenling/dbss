@@ -16,9 +16,10 @@ from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit  import CreateView
 
+import django_rq
+
 from rest_framework.generics import ListAPIView
 
-import django_rq
 from redis_cache import get_redis_connection
 
 from dbss.utils import MyPaginate, distr_object, updatefcard, send_message
@@ -162,6 +163,7 @@ class WhiteList(BlackList, View):
         pass
 
 class UpdateFcard(BaseCardViewMixin, CreateView):
+
     model = Fcard
     form_class = FCardNewForm
     card_arg = 'card_pk'
@@ -227,6 +229,48 @@ class UpdateFcard(BaseCardViewMixin, CreateView):
         tmp_new_f.nextcard = tmp_new_f
         tmp_new_f.save()
         return tmp_new_f
+
+class EditFcard(BaseCardViewMixin, View):
+    
+    model = Fcard
+    form_class = FCardNewForm
+    fcard_limit = F('id')
+    template_name = 'cardspace/editfcard.html'
+
+    def can_do(self,request, *args, **kwargs):
+        self.object = self.get_object()
+        self.fid = kwargs.get('user_pk')
+        ist = str(self.fid) == str(request.user.id)
+        if ist == False:
+            raise Http404
+        try:
+            self.fcardobj = Fcard.objects.get(mcard = self.object, carduser__id = request.user.id, nextcard = self.fcard_limit) 
+        except Fcard.DoesNotExist:
+            raise Http404
+
+    def get_context_data(self, *args, **kwargs):
+        context_data ={}
+        context_data['card'] = self.object
+        context_data['fcardusername'] = self.request.user.get_full_name
+        return context_data
+
+    def get(self, request, *args, **kwargs):
+        self.can_do(request, *args, **kwargs)
+        context_data = self.get_context_data(*args, **kwargs)
+        context_data['form'] = self.form_class({'context': self.fcardobj.context})
+        return render(request,self.template_name, context_data)
+
+    @transaction.commit_on_success
+    def post(self, request, *args, **kwargs):
+        self.can_do(request, *args, **kwargs)
+        upform = self.form_class(request.POST)
+        if upform.is_valid():
+            self.fcardobj.context = upform.cleaned_data['context']
+            self.fcardobj.save()
+            return render(request, 'done.html', {'reurl': reverse('cardspace:cardinfo', kwargs={'pk': self.object.id }), 'content': 'edit success'})
+        context_data = self.get_context_data(*args, **kwargs)
+        context_data['form'] = upform
+        return render(request,self.template_name, context_data)
 
 
 class FCardInfo(BaseCardViewMixin, ListView):

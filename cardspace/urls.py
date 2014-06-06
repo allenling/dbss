@@ -3,7 +3,7 @@ from django.conf.urls import patterns,  url
 from django.contrib.auth.decorators import login_required
 
 from dbss.cardspace.views import CardInfo, InviteFriends, CinviteFriendsList, CardInfoD, BlackList, WhiteList,\
-        UserSnapList, UpdateFcard,FCardInfo, SearchFcardList, FuserGraphic, FuserGraphicy, FuserGraphicm, FuserGraphicd
+        UserSnapList, UpdateFcard,FCardInfo, SearchFcardList, FuserGraphic, FuserGraphicy, FuserGraphicm, FuserGraphicd, EditFcard
 
 urlpatterns = patterns('',
     url(r'^$',CardInfo.as_view(), name = 'cardinfo'),
@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^users/$',UserSnapList.as_view(), name = 'cardusers'),	
     url(r'^update/(?P<fcard_pk>\d+)/$',login_required(UpdateFcard.as_view()), name = 'updatefcard'),	
     url(r'^fcards/(?P<user_pk>\d+)/$',FCardInfo.as_view(), name = 'fcard_info'),	
+    url(r'^fcards/(?P<user_pk>\d+)/edit/$',EditFcard.as_view(), name = 'editfcard'),	
     url(r'^fcards/(?P<user_pk>\d+)/year/(?P<fyear>\d{4})/$',SearchFcardList.as_view(), name = 'sfl_year'),	
     url(r'^fcards/(?P<user_pk>\d+)/year/(?P<fyear>\d{4})/month/(?P<fmonth>\d{1,2})/$',SearchFcardList.as_view(), name = 'sfl_ymonth'),	
     url(r'^fcards/(?P<user_pk>\d+)/year/(?P<fyear>\d{4})/month/(?P<fmonth>\d{1,2})/day/(?P<fday>\d{1,2})/$',SearchFcardList.as_view(), name = 'sfl_ymday'),	

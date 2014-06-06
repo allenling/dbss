@@ -19,8 +19,7 @@
           {% block leftbar %}
           {% if card.isclose == False and show_rich == False %}
           {% if request.user.is_anonymous %}
-          <a href="{% url 'auth_login' %}?next={{ request.path }}"><button type"button" class="btn btn-primary" style="margin-top:30px;" id="joincard" target = {{ 
-    card.id }}>加入活动</button></a>
+          <a href="{% url 'auth_login' %}?next={{ request.path }}"><button type"button" class="btn btn-primary" style="margin-top:30px;" id="joincard" target = {{ card.id }}>加入活动</button></a>
           {% else %}
           <button type"button" class="btn btn-primary cardaction" style="margin-top:30px;" id="joincard" target = {{ card.id }}>加入活动</button>
           {% endif %}
@@ -119,7 +118,7 @@
                 </div>
 								<hr class="cardivi">
                 <a style="text-decorator:none" href="{% url 'cardspace:fcard_info' card.id j.carduser.id %}"><i class="fa fa-book fa-lg pull-right fcardmore" style="margin-top:6px;"></i></a>
-                <i class="fa fa-heart fa-large listaction" method="blacklist" id="b_{{ j.id }}" action="add" style="color:black;"></i><i class="fa fa-heart-o fa-large listaction" action="add" method="whitelist" id="w_{{ j.id }}" style="margin-left:5px;"></i>
+                <i class="fa fa-heart fa-large listaction" method="blacklist" id="b_{{ j.id }}" action="add" style="color:black;"></i><i class="fa fa-heart-o fa-large listaction" action="add" method="whitelist" id="w_{{ j.id }}" style="margin-left:5px;"></i>{% if request.user.id == j.carduser.id %}<a href="{% url 'cardspace:editfcard' card.id request.user.id %}"><i class="fa fa-edit" style="margin-left:5px;"></i></a>{% endif %}
               </div>
               </li>
             </ul>
