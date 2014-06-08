@@ -54,7 +54,3 @@ urlpatterns +=patterns('',
 urlpatterns +=patterns('',
     url(r'^django-rq/',include('django_rq.urls',)),
 )
-
-urlpatterns +=patterns('',
-    url(r'^admin/rq/',include('django_rq_dashboard.urls')),
-)

@@ -4,8 +4,8 @@ import os
 from django.conf import global_settings
 import dbss.local_settings
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+DEBUG = False
+TEMPLATE_DEBUG = False
 DEFAULT_FROM_EMAIL = dbss.local_settings.DEFAULT_FROM_EMAIL
 EMAIL_HOST= dbss.local_settings.EMAIL_HOST
 EMAIL_PORT = dbss.local_settings.EMAIL_PORT
@@ -14,7 +14,7 @@ EMAIL_HOST_PASSWORD = dbss.local_settings.EMAIL_HOST_PASSWORD
 
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+     ('allenling', '328703810@qq.com'),
 )
 
 MANAGERS = ADMINS
@@ -22,7 +22,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'whysos',                      # Or path to database file if using sqlite3.
+        'NAME': 'whysosdb',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': dbss.local_settings.DBROOT,
         'PASSWORD': dbss.local_settings.DBPWD,
@@ -141,7 +141,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'registration',
     'django_rq',
-    'django_rq_dashboard',
+    #'django_rq_dashboard',
     'corsheaders',
 	'dbss.user_auth',
 	'dbss.cardspace',

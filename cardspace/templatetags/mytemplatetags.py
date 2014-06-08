@@ -5,3 +5,7 @@ register = template.Library()
 @register.filter
 def str_eq_int(value, arg):
     return str(value)==str(arg)
+
+@register.filter
+def trans_for_number(value):
+    return int(value)
