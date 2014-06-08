@@ -4,11 +4,11 @@ from django.core.urlresolvers import reverse
 
 
 VERB_DICT = {
-    'createpubcard': ''' create a public card''',
-    'createpricard': ''' create a private card''',
-    'invitepub': ''' invite you a public card''',
-    'invitepri': ''' invite you a private card''',
-    'updatefcard': ''' update a fcard''',
+    'createpubcard': ''' 创建了一个公开的活动卡''',
+    'createpricard': ''' 创建了一个私密的活动卡''',
+    'invitepub': ''' 邀请你加入一个公开的活动''',
+    'invitepri': ''' 邀请你加入一个私密的活动''',
+    'updatefcard': ''' 更新了一个活动''',
 }
 
 class Activity(object):
