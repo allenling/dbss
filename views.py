@@ -5,16 +5,16 @@ import pickle
 from django import forms
 from django.conf import settings
 from django.contrib.formtools.wizard.views import SessionWizardView
+from django.contrib.auth import logout
+from django.contrib.sites.models import RequestSite
+from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.http import Http404
 from django.http import HttpResponseRedirect 
+from django.shortcuts import render, render_to_response
 from django.views.generic import ListView
 from django.views.generic.edit  import CreateView
-from django.contrib.auth import logout
-from django.contrib.sites.models import Site
-from django.contrib.sites.models import RequestSite
-from django.db import transaction
-from django.core.urlresolvers import reverse
-from django.shortcuts import render, render_to_response
 
 import django_rq
 from redis_cache import get_redis_connection
