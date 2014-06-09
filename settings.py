@@ -200,6 +200,8 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
 
 AUTH_USER_MODEL='user_auth.MyUser'
 REQUIRED_LOGIN_PATH='/login/'
