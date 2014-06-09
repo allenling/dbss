@@ -1,6 +1,8 @@
 #coding=utf8
+
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
+from django.utils.encoding import smart_unicode
 
 
 VERB_DICT = {
@@ -20,8 +22,8 @@ class Activity(object):
         self.date = c_date
         self.thumbcontent = thumbcontent
         self.mobject_id = mobject_id
-        self.mtitle = '''<a href="'''+reverse('cardspace:cardinfo', kwargs={'pk':self.mobject_id})+'''">'''+mtitle+'''</a>'''
-        self.verb = '''<a href="'''+reverse('cardspace:cardinfo',kwargs={'pk':self.muser})+'''">'''+self.user_name+'''</a>'''+VERB_DICT.get(verb)
+        self.mtitle = '''<a href="''' + reverse('cardspace:cardinfo', kwargs={'pk':self.mobject_id})+'''">'''+mtitle+'''</a>'''
+        self.verb = '''<a href="''' + reverse('cardspace:cardinfo',kwargs={'pk':self.muser})+'''">''' + smart_unicode(self.user_name) + '''</a>''' + smart_unicode(VERB_DICT.get(verb))
         self.verbtext = verb
 
     def __unicode__(self):
