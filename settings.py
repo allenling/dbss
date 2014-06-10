@@ -209,6 +209,7 @@ LOGIN_URL = '/account/login/'
 TEMPLATE_CONTEXT_PROCESSORS= global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
 	'django.core.context_processors.request',
 	'django.contrib.auth.context_processors.auth',
+        'dbss.context_processors.unreadmsg',
 )
 
 LOGIN_REQUIRED_APP = []

@@ -42,7 +42,8 @@ class BaseUserMixin(object):
             raise Http404
         upk = int(rquser.id)
         self.rquser = rquser
-        if request.user.is_anonymous() == False and request.user.is_authenticated():
+        if request.user.is_anonymous() == False and \
+           request.user.is_authenticated():
             if request.user.id == upk:
                 self.isowner = True
             else:
@@ -72,7 +73,8 @@ class FeedPage(BaseUserMixin, ListView):
         if self.isowner:
             tarredis = redis_c.lrange(str(self.rquser.id), 0, 1300)
         else:
-            tarredis = redis_c.lrange(str(self.rquser.id)+settings.USER_PUBLIC_FEED, 0, 1300)
+            tarredis = redis_c.lrange(str(self.rquser.id) + \
+                                      settings.USER_PUBLIC_FEED, 0, 1300)
         for i in tarredis:
             j = pickle.loads(i)
             j.set_real_user()
@@ -84,7 +86,8 @@ class FeedPage(BaseUserMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context_data = self.top_super_context(**kwargs)
-        temp_page = MyPaginate(context_data['page_obj'].number, context_data['paginator'].num_pages)
+        temp_page = MyPaginate(context_data['page_obj'].number, \
+                               context_data['paginator'].num_pages)
         context_data['phead'] = temp_page.phead
         context_data['pageheadot'] = temp_page.pageheadot
         context_data['ptail'] = temp_page.ptail
@@ -102,7 +105,9 @@ class FeedPage(BaseUserMixin, ListView):
         self.getisowner(request, kwargs)
         return super(FeedPage, self).get(request, *args, **kwargs)
 
+
 class MessagePage(BaseUserMixin, ListView):
+
 
     template_name = 'user_auth/message.html'
     model = Card
@@ -112,14 +117,15 @@ class MessagePage(BaseUserMixin, ListView):
     msg_redis = get_redis_connection('message')
 
     def get_queryset(self):
-        self.queryset = self.msg_redis.zrevrange(str(self.request.user.id), 0, -1)
+        self.queryset = self.msg_redis.zrevrange(str(self.request.user.id), 0,\
+                                                 -1)
         return self.queryset
 
     def top_super_context(self, **kwargs):
         return super(MessagePage, self).get_context_data(**kwargs)
 
     def load_msg(self, context_data):
-        contacts = [str(self.request.user.id)+'_'+str(i) for i in context_data['object']]
+        contacts = [str(self.request.user.id)+'_' + str(i) for i in context_data['object']]
         context_data['object'] = [simplejson.loads(self.msg_redis.lrange(j, 0, 0)[0]) for j in contacts]
 
     def get_context_data(self, **kwargs):
@@ -151,8 +157,17 @@ class GetMessage(MessagePage):
             m = User.objects.get(pk = self.mpk)
         except User.DoesNotExist:
             raise Http404
+        #set msg read
+        first_msg = self.msg_redis.lpop(str(self.request.user.id)+ '_' + self.mpk)
+        if first_msg != None:
+            tmp = simplejson.loads(first_msg)
+            tmp['status'] = 'read'
+            self.msg_redis.lpush(str(self.request.user.id) + '_' + self.mpk, simplejson.dumps(tmp))
         self.queryset = self.msg_redis.lrange(str(self.request.user.id)+'_'+self.mpk, 0 , -1)
         self.targetuser = m
+        #reduce user unread msg count
+        if int(self.msg_redis.get('unread_' + str(self.request.user.id)) > 0):
+            self.msg_redis.decr('unread_'+str(self.request.user.id))
         return self.queryset
 
     def load_msg(self, context_data):

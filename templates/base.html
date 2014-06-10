@@ -67,7 +67,7 @@
               <li><a href="/logout/?next={% if request.GET.next %}{{ request.GET.next }}{% elif  request.get_full_path == '/register/' %}/{% else %}{{ request.get_full_path }}{% endif %}"><i class="fa fa-sign-out"></i></a></li>
 						</ul>
 						</li>
-            <li><a href="{% url 'user_auth:mymessage' request.user.id %}" id="topmessage"><i class="fa fa-envelope fa-lg"></i></a></li>
+						<li><a href="{% url 'user_auth:mymessage' request.user.id %}" id="topmessage" {% if hasunread %}style="color:white;"{% endif %}><i class="fa fa-envelope fa-lg"></i></a></li>
           </ul>
           {% endif %}
 				</div><!--/.nav-collapse -->
