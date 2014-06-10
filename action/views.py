@@ -71,7 +71,7 @@ class RemoveConcern(UserAction):
         if isf:
             self.request.user.removefriends(targetuser)
             self.request.user.requestconcern(targetuser)
-            self.scontent["msg"]="remove success!"
+            self.scontent["msg"]=u'成功取消关注！'
             self.scontent["extra"]="bookmark"
         else:
             try:
@@ -80,11 +80,17 @@ class RemoveConcern(UserAction):
                 targetuser.requestconcernme(self.request.user)
                 iscon = targetuser.rconcernme
             if  iscon:
-                targetuser.removerconcern(self.request.user)
-                self.scontent["msg"]="remove success!"
-                self.scontent["extra"]="plus"
+                try:
+                    targetuser.removerconcern(self.request.user)
+                except Exception, e:
+                    self.econtent["msg"] = u'发生了错误，请联系管理员'
+                    #暂时手动引发该异常
+                    raise AttributeError
+                else:
+                    self.scontent["msg"]=u'成功取消关注！'
+                    self.scontent["extra"]="plus"
             else:
-                self.econtent['msg'] = u'you have not concern that user'
+                self.econtent['msg'] = u'你并没有关注用户！'
                 raise UserFollow.DoesNotExist
 
 class AddConcern(UserAction):
@@ -97,7 +103,7 @@ class AddConcern(UserAction):
             targetuser.requestconcernme(self.request.user)
             iscon = targetuser.rconcernme
         if iscon:
-            self.econtent['msg'] = u'you have concern that user '
+            self.econtent['msg'] = u'你已经关注了该用户！'
             raise UserFollow.DoesNotExist
         else:
             try:
@@ -108,11 +114,11 @@ class AddConcern(UserAction):
             if addfriends:
                 targetuser.removeconcernr(self.request.user)
                 targetuser.addfriends(self.request.user)
-                self.scontent['msg']='add success!'
+                self.scontent['msg']=u'关注成功！你们以互相关注！'
                 self.scontent["extra"]="users"
             else:
                 targetuser.requestconcern(self.request.user)
-                self.scontent['msg']='add success!'
+                self.scontent['msg']=u'关注成功！'
                 self.scontent["extra"]="minus"
 
 class BaseCardActionMixin(object):
@@ -145,11 +151,11 @@ class JoinCard(ActionBaseMixin, BaseCardActionMixin, APIView):
             request.user.is_active = False
             request.user.save()
             logout(request)
-            content = {'type':'error', 'msg': 'do not join again,you had joined this Card! and we will frozen you account.'}
+            content = {'type':'error', 'msg': u'请不要在加入该活动卡，你已经参加了该活动卡了，我们将冻结你的账户，请与管理员联系！'}
         except User.DoesNotExist:
             cardobj.users.add(request.user)
             newfavlist(request.user.id, cardobj.id)
-            content = {'type':'success', 'msg':'join success'}
+            content = {'type':'success', 'msg':u'加入成功'}
         except Exception,e:
             content = {'type':'error', 'msg': str(e)}
         return Response(content)
@@ -163,12 +169,12 @@ class QuitCard(JoinCard):
             cardobj.users.get(pk = request.user.id)
             cardobj.users.remove(request.user)
             deletefavlist(request.user.id, cardobj.id)
-            content = {'type':'success', 'msg':'quit success'}
+            content = {'type':'success', 'msg':u'成功推出'}
         except User.DoesNotExist:
             request.user.is_active = False
             request.user.save()
             logout(request)
-            content = {'type':'error', 'msg': 'do not  quit, you were not in this card! and we will frozen you account.'}
+            content = {'type':'error', 'msg': u'请不要再推出该活动卡, 你已经不在该活动卡里面了，我们将会冻结你的账户，请与管理员联系！'}
         except Exception,e:
             content = {'type':'error', 'msg': str(e)}
         return Response(content)
