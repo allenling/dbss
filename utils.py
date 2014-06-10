@@ -214,8 +214,6 @@ def store_msg(redis_connnect, content):
     redis_connnect.zincrby(content['towho_id'], content['who_id'])
     update_msg(redis_connnect, whostr, 'read', content)
     update_msg(redis_connnect, tostr, 'unread', content)
-    #increment unread msg count
-    redis_connnect.incr('unread_'+content['towho_id'])
 
 def send_message(content, ulist, action, property, objid = None):
     userobjlist = []
@@ -235,10 +233,3 @@ def send_message(content, ulist, action, property, objid = None):
         preuserlist = PrivateCardPreuser.objects.get_or_create(privatecard__id = objid)
         for i in userobjlist:
             preuserlist[0].preuser.add(i)
-
-def get_unread_msg(request):
-    
-    msg_redis = get_redis_connection('message')
-    if request.user.is_anonymous() == False and request.user.is_authenticated():
-        umsg = msg_redis.get('unread_' + str(request.user.id))
-        return True if umsg is not None and int(umsg) > 0 else False
