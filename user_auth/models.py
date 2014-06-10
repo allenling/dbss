@@ -89,8 +89,12 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
          tmp.delete()
 
     def removerconcern(self, requestu):
-         tmp = UserFollow.objects.get_or_create(fuser_id = requestu.id, tuser_id = self.id)
-         tmp.delete()
+         try:
+            tmp = UserFollow.objects.get(fuser_id = requestu.id, tuser_id = self.id)
+         except UserFollow.DoesNotExist:
+            pass
+         else:
+            tmp.delete()
 
     def addfriends(self, requestu):
         self.friends.add(requestu)
