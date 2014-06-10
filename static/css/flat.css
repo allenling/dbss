@@ -1,0 +1,139 @@
+body{
+	background-color:#ecf0f1;
+}
+.navbar-inverse{
+	background:#34495e;
+	border:none;
+}
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus{
+	background-color:#95a5a6;
+}
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus{
+	background-color:#95a5a6;
+}
+.bs-sidenav{
+    text-shadow:none;
+}
+#topsearch{
+	margin-top:12px;
+}
+#topsearch > input{
+	height:30px;
+}
+#topavatar{
+	padding-bottom:0px;
+}
+#topavatar:focus{
+    background-color:#34495e;
+}
+#topmessage{
+    padding-bottom:10px;
+    padding-top:20px;
+}
+.mainrow{
+	padding-left:50px;
+	padding-right:50px;
+}
+.bs-sidebar.affix.leftbar{
+	width:200px;
+	position:static;
+	top:30px;
+}
+.leftbaricon{
+	margin-top:4px;
+}
+.cardtag{
+    margin-right:8px;
+}
+.topdropmenu{
+	border:none;
+	background-color:#34495e;
+	-webkit-box-shadow:none;
+	box-shadow:none;
+    min-width:100px;
+}
+.dropdown-menu>li>a{
+	color:#E4B6B6;
+    text-align:center;
+}
+.toptools{
+	padding-top:0;
+	padding-bottom:0;
+	margin-bottom:0;
+	margin-top:0;
+}
+#toptoolabel{
+	color:white;
+	text-align:center;
+	text-decoration:none;
+	text-shadow:none;
+	padding-left:10px;
+	padding-right:10px;
+}
+.tagsearcglabel{
+	background-color:#34495e;
+    font-size:30px;
+}
+#toptooltags{
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+.card{
+	margin-bottom:10px;
+	background-color:white;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+.cardmain{
+	display: block;
+	color: #716b7a;
+	padding: 5px 15px;
+	
+}
+.cleft{
+	padding-right:0;
+}
+.cleft,.cright{
+	padding-left:0;
+	padding-right:0;
+}
+.cardtitle{
+	display:block;
+}
+.cardinfo{
+	margin-top:3px;
+}
+.cardivi{
+	margin-top:5px;
+	margin-bottom:10px;
+    color:#2980b9;
+    height:2px;
+}
+.recentcontext{
+    font-size:10px;
+    min-height:80px;
+}
+.tagitem{
+    padding-left:20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+.userswall{
+    margin-bottom:25px;
+    padding-right:0px;
+}
+.userinfo{
+    padding-left:0;
+    padding-right:0;
+}
+.usersomething{
+    margin-bottom:0;
+}
+.mybread{
+    margin-bottom:0;
+}
+.toprelationicon{
+    padding-top:3px;
+}

@@ -1,0 +1,24 @@
+.registermain{
+    margin-top:100px;
+}
+.register1left{
+    font-size:30px;
+    text-align:center;
+    background-color:#e74c3c;
+    color:#3498db;
+}
+.register1input{
+    margin-top:10px;
+    padding-left:10px;
+    padding-right:10px;
+    padding-bottom:10px;
+}
+.register1input > form > .input-group{
+    margin-bottom:10px;
+}
+label {
+    display:none;
+}
+.errorlist > li{
+    color:red;
+}
