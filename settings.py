@@ -200,8 +200,6 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-
 
 AUTH_USER_MODEL='user_auth.MyUser'
 REQUIRED_LOGIN_PATH='/login/'
@@ -327,3 +325,8 @@ RQ_QUEUES = {
 }
 RQ_SHOW_ADMIN_LINK = True
 USER_PUBLIC_FEED = '_otherview'
+
+INDEX_TIME = 60
+INDEX_COUNT=1000
+INDEX_NAME='indexcount'
+INDEX_QUEUE='cronindex'

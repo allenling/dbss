@@ -3,10 +3,15 @@ import re
 from bs4 import BeautifulSoup
 
 from django.db import models
+from django.db.models import signals
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.utils.encoding import smart_unicode, smart_text
 
 from ckeditor.fields import RichTextField
+import django_rq
+from redis_cache import get_redis_connection
+from haystack.management.commands import update_index
 
 from dbss.user_auth.models import MyUser as User
 from dbss.activity import Activity
@@ -170,3 +175,17 @@ class PrivateCardPreuser(models.Model):
 
     def __unicode__(self):
         return self.privatecard.title+'_prevuser'
+
+def cron_update_index(sender, **kwargs):
+    index_redis = get_redis_connection('djrq')
+    index_count = int(index_redis.incr(settings.INDEX_NAME))
+    if index_count > settings.INDEX_COUNT + 1:
+        index_redis.set(settings.INDEX_NAME, 0)
+        index_queue = django_rq.get_queue(settings.INDEX_QUEUE)
+        if index_queue.count < 1:
+            index_queue.enqueue(warp_update_index)
+
+def warp_update_index():
+    update_index.Command().handle()
+
+signals.post_save.connect(cron_update_index, sender=Card, dispatch_uid='unique_save') 

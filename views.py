@@ -5,16 +5,16 @@ import pickle
 from django import forms
 from django.conf import settings
 from django.contrib.formtools.wizard.views import SessionWizardView
-from django.contrib.auth import logout
-from django.contrib.sites.models import RequestSite
-from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
-from django.db import transaction
 from django.http import Http404
 from django.http import HttpResponseRedirect 
-from django.shortcuts import render, render_to_response
 from django.views.generic import ListView
 from django.views.generic.edit  import CreateView
+from django.contrib.auth import logout
+from django.contrib.sites.models import Site
+from django.contrib.sites.models import RequestSite
+from django.db import transaction
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, render_to_response
 
 import django_rq
 from redis_cache import get_redis_connection
@@ -24,9 +24,10 @@ from haystack.views import SearchView
 
 from registration.models import RegistrationProfile
 
-from dbss.utils import MyPaginate, distr_object,  newfavlist
 from dbss.myform.registerform import ReUserForm1, ReUserForm3
 from dbss.myform.searchform import SearchForm
+from dbss.utils import MyPaginate, distr_object,  newfavlist
+from dbss.signals import index_update
 
 
 from dbss.user_auth.models import MyUser as User
@@ -185,7 +186,6 @@ class CreateCard(CreateView):
             tmp_tag.allc = tmp_tag.allc+1
             tmp_tag.save()
             tmp_card.tags.add(tmp_tag)
-        tmp_card.save()
         if self.request.user.favlist == None or self.request.user.favlist == '' or self.request.user.favlist == 'null':
             t_f = {}
         else :
@@ -233,6 +233,7 @@ class CreateCard(CreateView):
             friends_list = [j.to_myuser_id for j in User.objects.raw(self.friendsraw%self.request.user.id)]
             followers_list.extend(friends_list)
             targeturl = self.processfeed(tmp_card, form, followers_list)
+            index_update.send(sender=Card,)
             return HttpResponseRedirect(reverse(targeturl, kwargs={'pk': tmp_card.id}))
         except Exception, e:
             return super(CreateCard, self).form_invalid(form)
@@ -268,6 +269,8 @@ class WSearchView(SearchView):
         self.template = self.model_map_int.get(models_num[0]).get('template_name')
         if models_num[0] == '789':
             self.isuser = True
+        else:
+            self.isuser = False
 
         kwargs['load_all'] = self.load_all
         new_request_get.setlist('models', tmp)
