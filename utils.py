@@ -130,6 +130,12 @@ class FcardUtils(object):
 
 
     def get_score(self, daydiff, prevdaydiff):
+        if daydiff is 0:
+            df = prevdaydiff + 1
+        elif daydiff is 1:
+            df = prevdaydiff
+        else:
+            df = prevdaydiff + daydiff -1
         df = prevdaydiff + daydiff
         return (round(0.1/math.pow(df-1,1.1),5),df - 1 if daydiff <= prevdaydiff else df )
 
@@ -141,7 +147,7 @@ class FcardUtils(object):
             prevdaydiff = self.fcard.prevcard.daydiff
             prev_score = self.fcard.prevcard.score
 
-            (self.t_score, t_daydiff) = self.get_score(1 if daydiff.days == 0 else daydiff.days, prevdaydiff)
+            (self.t_score, t_daydiff) = self.get_score(daydiff.days, prevdaydiff)
             self.fcard.score = prev_score + self.t_score
             self.fcard.daydiff = int(t_daydiff)
             self.fcard.save(update_fields = ['score', 'daydiff'])
