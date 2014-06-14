@@ -1,5 +1,4 @@
 #coding=utf8
-from dbss.daemonize import Daemonize
 import logging
 import logging.handlers
 import time
@@ -11,6 +10,7 @@ import django_rq
 from redis_cache import get_redis_connection
 
 from dbss.cardspace.models import warp_update_index
+from dbss.daemonize import Daemonize
 
 def test():
     pass
