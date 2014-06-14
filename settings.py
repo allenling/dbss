@@ -4,8 +4,8 @@ import os
 from django.conf import global_settings
 import dbss.local_settings
 
-DEBUG = False
-TEMPLATE_DEBUG = False
+DEBUG = True
+TEMPLATE_DEBUG = True
 DEFAULT_FROM_EMAIL = dbss.local_settings.DEFAULT_FROM_EMAIL
 EMAIL_HOST= dbss.local_settings.EMAIL_HOST
 EMAIL_PORT = dbss.local_settings.EMAIL_PORT
@@ -112,7 +112,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
      'django.middleware.clickjacking.XFrameOptionsMiddleware',
      'corsheaders.middleware.CorsMiddleware',
-	#'dbss.mymiddleware.myapploginrequired.MyappLoginRequired',
 )
 
 ROOT_URLCONF = 'dbss.urls'
@@ -321,6 +320,9 @@ RQ_QUEUES = {
     },
     'msgrq':{
         'USE_REDIS_CACHE': 'msgrq',
+    },
+    'cronindex':{
+        'USE_REDIS_CACHE': 'djrq',
     }
 }
 RQ_SHOW_ADMIN_LINK = True
