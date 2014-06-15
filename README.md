@@ -5,9 +5,9 @@ Whysos.info source
 **设计在wiki有说明**         
 ### 关于第三方库        
 1.django-avatar的修改在fork的版本里面    
-2.captcha是用的django-captcha是使用django-ckeditor-updated-4.2.7版本，修改的内容只限于ckeditor的静态文件     
+2.django-ckeditor是用的django-captcha是使用django-ckeditor-updated-4.2.7版本，修改的内容只限于ckeditor的静态文件     
 可以直接使用static里面的ckedit    
-3.daemonize的修改见fork版本    
+3.daemonize的修改见fork版本，或者直接使用当前目录下的daemonize.py文件
 
 
 ===
