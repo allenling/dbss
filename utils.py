@@ -221,7 +221,7 @@ def store_msg(redis_connnect, content):
     update_msg(redis_connnect, whostr, 'read', content)
     update_msg(redis_connnect, tostr, 'unread', content)
     #increment unread msg count
-    redis_connnect.incr('unread_'+content['towho_id'])
+    redis_connnect.incr('unread_'+content['who_id'])
 
 def send_message(content, ulist, action, property, objid = None):
     userobjlist = []
