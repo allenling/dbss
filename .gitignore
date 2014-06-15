@@ -3,3 +3,4 @@ email_settings.py
 whoosh_index/*
 local_settings.py
 media/*
+*.v1
