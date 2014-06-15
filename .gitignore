@@ -1,13 +1,5 @@
 *.pyc
 email_settings.py
-static/ckeditor/*
-static/dajaxice/*
-static/rq/*
-static/rest_framework/*
-static/admin/*
-static/avatar/*
-static/fonts/*
-static/bootstrap/*
 whoosh_index/*
 local_settings.py
 media/*
