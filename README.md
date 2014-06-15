@@ -2,7 +2,8 @@ dbss
 ====
 Whysos.info source    
 环境: Centos6.4+uwsgi+nginx+django-1.5.4    
-**设计在wiki有说明**    
+**设计在wiki有说明**     
+
 =====
 ### 本地配置
 需要在本地建立local_settings.py来配置本地的一些内容，内容见settings.py     
