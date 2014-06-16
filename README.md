@@ -21,6 +21,3 @@ redis
 4.django-simple-captcha在使用FormWizard的时候有个二次验证的问题，详情见[地址](http://blog.csdn.net/a_9884108/article/details/18795249)，github上的讨论[github](https://github.com/mbi/django-simple-captcha/issues/6)
 
 ====
-#### wiki历史     
-**2014.6.13 加入更新索引策略说明**      
-**2014.6.15 加入计算方法设计说明**     
