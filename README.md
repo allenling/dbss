@@ -1,7 +1,12 @@
-dbss
+Whysos.info 源码    
 ====
-Whysos.info source    
-环境: Centos6.4+uwsgi+nginx+django-1.5.4+postgresq+redis      
+环境: 
+Centos6.4    
+uwsgi    
+nginx    
+django-1.5.4     
+postgresq    
+redis      
 **设计在wiki有说明**     
 
 =====
