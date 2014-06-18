@@ -1,12 +1,12 @@
 Whysos.info 源码    
 ====
 环境:      
-Centos6.4    
-uwsgi    
-nginx    
+Centos-6.4    
+uwsgi-1.9.14    
+nginx-1.4.2      
 django-1.5.4     
-postgresq    
-redis      
+postgresq-8.4.13    
+redis-2.8.8      
 **不包含服务器优化**   
 **设计在wiki有说明**     
 
