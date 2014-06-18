@@ -38,7 +38,7 @@ redis-2.8.8
 4.django-simple-captcha在使用FormWizard的时候有个二次验证的问题，详情见[地址](http://blog.csdn.net/a_9884108/article/details/18795249)，github上的讨论[github](https://github.com/mbi/django-simple-captcha/issues/6)
 5.django-haystack     
 6.rest_framework     
-7.django-registration     
+7.django-registration，加入了定义在myform中的LoginMsgForm，修改部分见fork的版本     
 8.django_rq      
 9.django\_rq\_dashboard       
 10.django\_cors\_headers        
