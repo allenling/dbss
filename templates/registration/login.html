@@ -37,7 +37,14 @@
                     </div>
                   </form>
                 </div>
-							</div>
+                </div>
+               {% if form.errors %}
+               <div class="row">
+               	<div class="col-sm-12">
+               		{{ form.non_field_errors }}
+               	</div>
+               </div>
+               {% endif %}
               <div class="row" style="margin-bottom:10px;">
                 <div class="col-sm-12">
                   <div class="col-sm-12">
