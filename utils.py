@@ -202,26 +202,26 @@ def updatefavlist(user_id, card_id, action, target):
         new_action = fa_list + '_'+target
         favlist_r.hset(str(user_id), card_id, new_action)
 
-def update_msg(redis_connnect, rindex, status, content):
-    isnone = redis_connnect.lpop(rindex)
+def update_msg(redis_connect, rindex, status, content):
+    isnone = redis_connect.lpop(rindex)
     content['status'] = status
     if isnone != None:
         isnone = simplejson.loads(isnone)
         del isnone['status']
-        redis_connnect.lpush(rindex, simplejson.dumps(isnone))
-    if redis_connnect.llen(rindex) > 500:
-        redis_connnect.rpop(rindex)
-    redis_connnect.lpush(rindex, simplejson.dumps(content))
+        redis_connect.lpush(rindex, simplejson.dumps(isnone))
+    #限制消息列表长度
+    redis_connect.ltrim(rindex, 0, 499)
+    redis_connect.lpush(rindex, simplejson.dumps(content))
 
-def store_msg(redis_connnect, content):
+def store_msg(redis_connect, content):
     whostr = str(content['who_id'])+'_'+ str(content['towho_id'])
     tostr = str(content['towho_id'])+'_'+str(content['who_id'])
-    redis_connnect.zincrby(content['who_id'], content['towho_id'])
-    redis_connnect.zincrby(content['towho_id'], content['who_id'])
-    update_msg(redis_connnect, whostr, 'read', content)
-    update_msg(redis_connnect, tostr, 'unread', content)
+    redis_connect.zincrby(content['who_id'], content['towho_id'])
+    redis_connect.zincrby(content['towho_id'], content['who_id'])
+    update_msg(redis_connect, whostr, 'read', content)
+    update_msg(redis_connect, tostr, 'unread', content)
     #increment unread msg count
-    redis_connnect.incr('unread_'+content['towho_id'])
+    redis_connct.incr('unread_'+content['towho_id'])
 
 def send_message(content, ulist, action, property, objid = None):
     userobjlist = []
