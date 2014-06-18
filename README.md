@@ -19,12 +19,13 @@ redis-2.8.8
 4.EMAIL\_HOST\_USER = dbss.local\_settings.EMAIL\_HOST\_USER            
 5.EMAIL\_HOST\_PASSWORD = dbss.local\_settings.EMAIL\_HOST\_PASSWORD            
 6.DATABASES = {     
-    'default': {      
-        ...    
-        'USER': dbss.local_settings.DBROOT,        
-        'PASSWORD': dbss.local_settings.DBPWD,          
-        ...          
-}                 
+&emsp;'default': {      
+&emsp;&emsp;...    
+&emsp;&emsp;'USER': dbss.local_settings.DBROOT,        
+&emsp;&emsp;'PASSWORD': dbss.local_settings.DBPWD,          
+&emsp;&emsp;...   
+&emsp;}   
+}                   
 7.STATIC\_ROOT = dbss.local\_settings.STATIC\_ROOT             
 8.MEDIA\_ROOT = dbss.local\_settings.MEDIA\_ROOT          
 9.SECRET\_KEY = dbss.local\_settings.SECRET\_KEY，这个是自动生成的，所以不配置用自动生成的值也可以      
