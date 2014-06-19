@@ -42,6 +42,5 @@ redis-2.8.8
 8.django_rq      
 9.django\_rq\_dashboard       
 10.django\_cors\_headers        
-**注册功能使用了SendClound服务，请确保在本地邮件配置能使用。**    
 
 ====
