@@ -230,7 +230,7 @@ WHITE_HTML_TAGS={
     'img':{'src': '^(http://|\/media|\/static)(.*)\S{1,}\.(jpg|png|jpeg|gif)$','height': '^\d{1,3}px$', 'width': '^\d{1,3}px$'},
     'object':{'classid': '^clsid:d27cdb6e-ae6d-11cf-96b8-444553540000$','codebase': '^http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0$',},
     'param':{'name':'^(allowFullScreen|movie)$','value':'(^http://(.*)\S{1,}\.swf$)|(^true$)'},
-    'embed':{'allowfullscreen':'^true$', 'pluginspage':'^http://www.macromedia.com/go/getflashplayer$', 'type': 'application/x-shockwave-flash', 'src': '^(http://|\/media|\/static)(.*)\S{1,}\.swf$','height': '^\d{1,3}px$', 'width': '^\d{1,3}px$', "allowFullScreen": "true"},
+    'embed':{'allowfullscreen':'^true$', 'pluginspage':'^http://www.macromedia.com/go/getflashplayer$', 'type': 'application/x-shockwave-flash', 'src': '^(http://|\/media|\/static)(.*)\S{1,}\.swf$','height': '^\d{1,3}px$', 'width': '100%', "allowFullScreen": "true"},
 }
 ACCOUNT_ACTIVATION_DAYS = 7
 CKEDITOR_UPLOAD_SLUGIFY_FILENAME = False
