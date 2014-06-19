@@ -109,7 +109,7 @@ class UsersPage(ListView):
     context_object_name = 'usersobject'
 
     def get_queryset(self):
-        return User.objects.exclude(id = 1).order_by('-score')
+        return User.objects.order_by('-score')
 
     def getrequestfri(self, fobj):
 		fobj.isrequestfriend(self.request.user)
