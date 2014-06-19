@@ -23,7 +23,7 @@ class MyDaemonized(Daemonize):
             index_queue = django_rq.get_queue(settings.INDEX_QUEUE)
             if index_queue.count < 1 :
                 index_redis = get_redis_connection('djrq')
-                index_count = int(index_redis.get(settings.INDEX_NAME))
+                index_count = int(index_redis.get(settings.INDEX_NAME)) if index_redis.get(settings.INDEX_NAME) else 0
                 if index_count > 0:
                     self.logger.info('index count is ' + str(index_count) + ', cron update index enqueue')
                     index_redis.set(settings.INDEX_NAME, 0)
