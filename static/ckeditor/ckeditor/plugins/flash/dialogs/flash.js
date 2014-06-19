@@ -235,7 +235,7 @@
                 })), i) d = CKEDITOR.dom.element.createFromHtml("<embed></embed>", a.document), d.setAttributes({
                     type: "application/x-shockwave-flash",
                     pluginspage: "http://www.macromedia.com/go/getflashplayer",
-                   width:"auto",
+                   width:"100%",
                   height:"400px"
                 }), e && d.appendTo(e);
                 if (e)
