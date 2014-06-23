@@ -280,7 +280,6 @@ class FCardInfo(BaseCardViewMixin, ListView):
     template_name = 'cardspace/fcardinfo.html'
 
     def get_queryset(self):
-    #def get_queryset(self, request, *args, **kwargs):
         self.object = self.get_object()
         try:
             fcarduser = User.objects.get(pk=self.kwargs.get('user_pk'))
@@ -290,7 +289,6 @@ class FCardInfo(BaseCardViewMixin, ListView):
                 raise Fcard.DoesNotExist
             self.queryset = all_fcard
             return all_fcard
-            #return super(FCardInfo, self).get(request, *args, **kwargs)
         except (Card.DoesNotExist, User.DoesNotExist, Fcard.DoesNotExist):
             raise Http404
 
