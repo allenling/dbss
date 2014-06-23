@@ -4,8 +4,8 @@ import os
 from django.conf import global_settings
 import dbss.local_settings
 
-DEBUG = True
-TEMPLATE_DEBUG = True
+DEBUG = False
+TEMPLATE_DEBUG = False
 DEFAULT_FROM_EMAIL = dbss.local_settings.DEFAULT_FROM_EMAIL
 EMAIL_HOST= dbss.local_settings.EMAIL_HOST
 EMAIL_PORT = dbss.local_settings.EMAIL_PORT
