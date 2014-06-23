@@ -30,7 +30,7 @@ function rearrow(di, aurl){
 function repali(tnum, turl, isnow){
       var tli = $("<li ></li>");
       var tli_a = $("<a ></a>");
-      tli.attr("target",turl)
+      tli_a.attr("target",turl)
       tli_a.text(tnum);
   if (isnow){
     tli.addClass("active");
@@ -95,7 +95,7 @@ function setpagin(mcounts, prev, next, len){
     if(counts-nowp > 5){
       for (var j = 1;j<5;j++){
         var tturl = pagea+(nowp+j);
-        pul.append(repali(nowp+j),pagea+(nowp+j));
+        pul.append(repali((nowp+j),pagea+(nowp+j)));
       }
       pul.append(redotpa());
       pul.append(repali(counts, pagea+counts));
