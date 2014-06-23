@@ -136,7 +136,6 @@ class FcardUtils(object):
             df = prevdaydiff
         else:
             df = prevdaydiff + daydiff -1
-        df = prevdaydiff + daydiff
         return (round(0.1/math.pow(df-1,1.1),5),df - 1 if daydiff <= prevdaydiff else df )
 
     def set_score(self):
