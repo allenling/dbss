@@ -7,6 +7,7 @@ from django.db.models import signals
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils.encoding import smart_unicode, smart_text
+from django.utils import timezone
 
 from ckeditor.fields import RichTextField
 import django_rq
@@ -52,7 +53,7 @@ class BaseCard(models.Model):
         return ac
 
     def getpubdate(self):
-        return self.pub_date.__str__()[:19]
+        return timezone.localtime(self.pub_date).__str__()[:19]
 
 class Fcard(BaseCard):
 
